@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -8,6 +9,13 @@ class Sprite(pygame.sprite.Sprite):
         self.scene_manager = scene_manager
         self.image = None
         self.rect = None
+        self.active = True
+        self.take_focus = True
+        self.interacts_with_mouse = True
+        self.behaviour = None
+
+        self._previous_focus = False
+        self.focus = False
 
     def load_image(self, path):
         """
@@ -20,8 +28,37 @@ class Sprite(pygame.sprite.Sprite):
         self.image = pygame.image.load(path).convert()
         self.rect = self.image.get_rect()
 
+    def update(self):
+        if self.behaviour is not None:
+            self.behaviour.on_update()
+
     def handle_event(self, event):
-        return False
+        handled = False
+        if not self.active:
+            return None
+
+        if self.take_focus:
+            mouse_pos = pygame.mouse.get_pos()
+            self._previous_focus = self.focus
+            if self.rect.collidepoint(mouse_pos):
+                self.focus = True
+            else:
+                self.focus = False
+            if self.behaviour is not None and self.focus is not self._previous_focus:
+                if self.focus:
+                    self.behaviour.on_hover()
+                elif not self.focus:
+                    self.behaviour.on_hover_exit()
+
+        if event.type == MOUSEBUTTONUP and self.focus:
+            if self.behaviour is not None:
+                self.behaviour.on_click(event.button)
+                handled = True
+
+        if self.behaviour is not None:
+            handled = self.behaviour.on_handle_event(event)
+
+        return handled
 
     def draw(self, surface):
         """
@@ -42,7 +79,7 @@ class SpriteBehaviour:
     Base class for scripts controlling sprite behaviour.
 
     Override the appropriate method and instantiate the descendant of this class
-    to Sprite.behaviourScript.
+    to Sprite.behaviour.
     """
 
     def __init__(self, sprite):
