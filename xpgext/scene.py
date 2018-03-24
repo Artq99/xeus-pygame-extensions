@@ -8,3 +8,13 @@ class SceneBase:
 
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
+
+
+class SimpleScene(SceneBase):
+    """
+    A scene type that works with SimpleSceneManager.
+    """
+
+    def __init__(self, scene_manager):
+        super().__init__(scene_manager)
+        self.sprites = list()
