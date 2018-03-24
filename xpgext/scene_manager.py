@@ -57,9 +57,13 @@ class SimpleSceneManager(SceneManagerBase):
 
     def load_scene(self, name):
         try:
-            self._current_scene = self._scenes
+            self._current_scene = self._scenes[name](self)
         except IndexError:
             raise SceneLoadingError("Scene {} has not been registered.".format(name))
+        else:
+            self._sprites.clear()
+            for sprite in self._current_scene.sprites:
+                self._sprites.append(sprite)
 
     def draw(self, surface):
         for sprite in reversed(self._sprites):
