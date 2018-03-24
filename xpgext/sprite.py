@@ -29,7 +29,7 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
-        if self.behaviour is not None:
+        if self.behaviour is not None and self.active:
             self.behaviour.on_update()
 
     def handle_event(self, event):
@@ -68,7 +68,8 @@ class Sprite(pygame.sprite.Sprite):
         :type surface: pygame.Surface
         """
 
-        surface.blit(self.image, self.rect.topleft)
+        if self.active:
+            surface.blit(self.image, self.rect.topleft)
 
     def set_pos(self, x, y):
         self.rect.topleft = (x, y)
