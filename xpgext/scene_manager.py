@@ -67,7 +67,7 @@ class SimpleSceneManager(SceneManagerBase):
 
     def draw(self, surface):
         for sprite in reversed(self._sprites):
-            sprite.draw()
+            sprite.draw(surface)
 
     def handle_event(self, event):
         for sprite in reversed(self._sprites):
