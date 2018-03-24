@@ -1,3 +1,7 @@
+class SceneLoadingError(Exception):
+    """Raised when loading a scene was unsuccessful."""
+
+
 class SceneManagerBase:
     """Abstract base class for all the scene manager types."""
 
@@ -39,3 +43,33 @@ class SceneManagerBase:
         """
         Update all the scene elements. Called every frame.
         """
+
+
+class SimpleSceneManager(SceneManagerBase):
+
+    def __init__(self):
+        self._scenes = dict()
+        self._current_scene = None
+        self._sprites = list()
+
+    def register_scene(self, scene, name):
+        self._scenes[name] = scene
+
+    def load_scene(self, name):
+        try:
+            self._current_scene = self._scenes
+        except IndexError:
+            raise SceneLoadingError("Scene {} has not been registered.".format(name))
+
+    def draw(self, surface):
+        for sprite in reversed(self._sprites):
+            sprite.draw()
+
+    def handle_event(self, event):
+        for sprite in reversed(self._sprites):
+            if sprite.handle_event(event):
+                break
+
+    def update(self):
+        for sprite in reversed(self._sprites):
+            sprite.update()
