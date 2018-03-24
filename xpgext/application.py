@@ -16,7 +16,9 @@ class XPGApplication:
 
     def __init__(self, scene_manager, resolution, *args, **kwargs):
         self.scene_manager = scene_manager
-        self.surface = pygame.display.set_mode(resolution, *args, **kwargs)
+        self._surface = pygame.display.set_mode(resolution, *args, **kwargs)
+        self._frame_rate = 30
+        self._clock = pygame.time.Clock()
 
         self.running = False
 
@@ -25,16 +27,27 @@ class XPGApplication:
 
         self.running = False
 
+    def set_frame_rate(self, frame_rate):
+        """
+        Set the desired frame rate.
+
+        :param frame_rate: the desired frame rate
+        :type frame_rate: int
+        """
+
+        self._frame_rate = frame_rate
+
     def run_main_loop(self):
         """Run the main loop of the application."""
-        
+
         self.running = True
         while self.running:
+            self._clock.tick(self._frame_rate)
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.on_quit()
                 else:
                     self.scene_manager.handle_event(event)
             self.scene_manager.update()
-            self.scene_manager.draw(self.surface)
+            self.scene_manager.draw(self._surface)
             pygame.display.flip()
