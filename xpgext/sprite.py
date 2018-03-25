@@ -115,3 +115,44 @@ class SpriteBehaviour:
         """
         Method called on Sprite.handle_event, when mouse pointer stops colliding with the sprite.
         """
+
+
+class Group(pygame.sprite.Group):
+    """Group implementation adjusted to work with XPGE Sprite."""
+
+    def __init__(self, *sprites):
+        super().__init__(sprites)
+
+    def handle_event(self, event):
+        """
+        Pass the event to each of the scene elements until one of them handles the event.
+
+        :param event: event to handle
+        :type event: pygame.event.Event
+        """
+
+        handled = False
+        for sprite in reversed(self.sprites()):
+            if sprite.handle_event(event):
+                handled = True
+                break
+        return handled
+
+    def update(self, *args):
+        """
+        Update all the scene elements. Called every frame.
+        """
+
+        for sprite in reversed(self.sprites()):
+            sprite.update(args)
+
+    def draw(self, surface):
+        """
+        Draw all the scene elements on the given surface.
+
+        :param surface: the pygame main surface
+        :type surface: pygame.Surface
+        """
+
+        for sprite in reversed(self.sprites()):
+            sprite.draw(surface)
