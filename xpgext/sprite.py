@@ -33,32 +33,34 @@ class Sprite(pygame.sprite.Sprite):
             self.behaviour.on_update()
 
     def handle_event(self, event):
-        handled = False
         if not self.active:
-            return None
+            return False
+        self._handle_mouse_motion(event)
+        handled = self._handle_mouse_button_up(event)
+        if not handled and self.behaviour is not None:
+            handled = self.behaviour.on_handle_event(event)
 
-        if self.take_focus:
-            mouse_pos = pygame.mouse.get_pos()
+        return handled
+
+    def _handle_mouse_motion(self, event):
+        if event.type == MOUSEMOTION and self.take_focus:
             self._previous_focus = self.focus
-            if self.rect.collidepoint(mouse_pos):
+            if self.rect.collidepoint(event.pos):
                 self.focus = True
             else:
                 self.focus = False
             if self.behaviour is not None and self.focus is not self._previous_focus:
                 if self.focus:
                     self.behaviour.on_hover()
-                elif not self.focus:
+                else:
                     self.behaviour.on_hover_exit()
 
+    def _handle_mouse_button_up(self, event):
         if event.type == MOUSEBUTTONUP and self.focus:
             if self.behaviour is not None:
                 self.behaviour.on_click(event.button)
-                handled = True
-
-        if self.behaviour is not None:
-            handled = self.behaviour.on_handle_event(event)
-
-        return handled
+                return True
+        return False
 
     def draw(self, surface):
         """

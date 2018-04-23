@@ -66,6 +66,7 @@ class SimpleSceneManager(SceneManagerBase):
                 self._sprites.append(sprite)
 
     def draw(self, surface):
+        surface.fill((0, 0, 0))
         for sprite in reversed(self._sprites):
             sprite.draw(surface)
 

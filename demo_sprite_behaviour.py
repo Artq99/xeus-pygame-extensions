@@ -11,21 +11,30 @@ from xpgext.sprite import Sprite, SpriteBehaviour
 
 class DemoSpriteBehaviour(SpriteBehaviour):
 
+    def __init__(self, sprite):
+        super().__init__(sprite)
+
+        self.counter = 0
+        self.default_image = sprite.image
+        self.another_image = pygame.image.load(os.path.join('demo_resources', 'star2.png'))
+
     def on_update(self):
-        print("Sprite update!")
+        self.counter += 1
+        if self.counter % 100 == 0:
+            print("Sprite update {}!".format(self.counter))
 
     def on_handle_event(self, event):
         if event.type == MOUSEMOTION:
-            print("-- Mouse moved!")
+            print("Mouse moved! {}".format(event.rel))
 
     def on_click(self, button):
-        print("-- -- Mouse button {} clicked!".format(button))
+        print("Mouse button {} clicked!".format(button))
 
     def on_hover(self):
-        print("-- -- Mouse enters!")
+        self.sprite.image = self.another_image
 
     def on_hover_exit(self):
-        print("-- -- Mouse exits!")
+        self.sprite.image = self.default_image
 
 
 class DemoScene(SimpleScene):
