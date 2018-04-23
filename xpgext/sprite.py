@@ -3,6 +3,9 @@ from pygame.locals import *
 
 
 class Sprite(pygame.sprite.Sprite):
+    """
+    Base class for all the visible game elements.
+    """
 
     def __init__(self, scene_manager, *groups):
         super().__init__(groups)
@@ -29,18 +32,30 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
+        """
+        Update sprite and call on_update methods from each of its components.
+        """
+
         if self.active:
             for component in self.components:
                 component.on_update()
 
     def handle_event(self, event):
+        """
+        Handle the given event. It is passed to each of its components
+
+        :param event: event
+        :type event: pygame.event.Event
+        """
+
         if not self.active:
             return False
         self._handle_mouse_motion(event)
         handled = self._handle_mouse_button_up(event)
         if not handled:
             for component in self.components:
-                handled = component.on_handle_event(event)
+                if component.on_handle_event(event):
+                    handled = True
 
         return handled
 
