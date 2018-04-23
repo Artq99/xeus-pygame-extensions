@@ -44,7 +44,7 @@ class DemoScene(SimpleScene):
         demo_sprite = Sprite(self.scene_manager)
         demo_sprite.load_image(os.path.join("demo_resources", "star.png"))
         demo_sprite.set_pos(270, 190)
-        demo_sprite.behaviour = DemoSpriteBehaviour(demo_sprite)
+        demo_sprite.components.append(DemoSpriteBehaviour(demo_sprite))
         self.sprites.append(demo_sprite)
 
 

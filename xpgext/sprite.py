@@ -12,7 +12,7 @@ class Sprite(pygame.sprite.Sprite):
         self.active = True
         self.take_focus = True
         self.interacts_with_mouse = True
-        self.behaviour = None
+        self.components = list()
 
         self._previous_focus = False
         self.focus = False
@@ -29,16 +29,18 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
-        if self.behaviour is not None and self.active:
-            self.behaviour.on_update()
+        if self.active:
+            for component in self.components:
+                component.on_update()
 
     def handle_event(self, event):
         if not self.active:
             return False
         self._handle_mouse_motion(event)
         handled = self._handle_mouse_button_up(event)
-        if not handled and self.behaviour is not None:
-            handled = self.behaviour.on_handle_event(event)
+        if not handled:
+            for component in self.components:
+                handled = component.on_handle_event(event)
 
         return handled
 
@@ -49,17 +51,18 @@ class Sprite(pygame.sprite.Sprite):
                 self.focus = True
             else:
                 self.focus = False
-            if self.behaviour is not None and self.focus is not self._previous_focus:
-                if self.focus:
-                    self.behaviour.on_hover()
-                else:
-                    self.behaviour.on_hover_exit()
+            if self.focus is not self._previous_focus:
+                for component in self.components:
+                    if self.focus:
+                        component.on_hover()
+                    else:
+                        component.on_hover_exit()
 
     def _handle_mouse_button_up(self, event):
         if event.type == MOUSEBUTTONUP and self.focus:
-            if self.behaviour is not None:
-                self.behaviour.on_click(event.button)
-                return True
+            for component in self.components:
+                if component.on_click(event.button):
+                    return True
         return False
 
     def draw(self, surface):
