@@ -1,3 +1,6 @@
+from xpgext.sprite import Sprite, Group
+
+
 class SceneLoadingError(Exception):
     """Raised when loading a scene was unsuccessful."""
 
@@ -44,6 +47,25 @@ class SceneManagerBase:
         Update all the scene elements. Called every frame.
         """
 
+    def find_by_name(self, name):
+        """
+        Find elements of the given name.
+
+        :param name: name of the elements to find
+        :type name: str
+        :return: list of elements of the given name
+        :rtype: list
+        """
+
+    def get_by_name(self, name):
+        """
+        Get the first element whose name matches the given one.
+
+        :param name: name to check
+        :type name: str
+        :return: element
+        """
+
 
 class SimpleSceneManager(SceneManagerBase):
 
@@ -81,3 +103,15 @@ class SimpleSceneManager(SceneManagerBase):
     def update(self):
         for sprite in reversed(self._sprites):
             sprite.update()
+
+    def find_by_name(self, name):
+        result = list()
+        for sprite in self._sprites:
+            result.extend(sprite.find_by_name(name))
+        return result
+
+    def get_by_name(self, name):
+        sprites = self.find_by_name(name)
+        if len(sprites) == 0:
+            return None
+        return sprites[0]

@@ -20,6 +20,14 @@ class Sprite(pygame.sprite.Sprite):
         self._previous_focus = False
         self.focus = False
 
+        self.name = None
+
+    def set_name(self, name):
+        self._name = name
+
+    def get_name(self):
+        return self._name
+
     def load_image(self, path):
         """
         Load image from the given path.
@@ -95,6 +103,23 @@ class Sprite(pygame.sprite.Sprite):
     def set_pos(self, x, y):
         self.rect.topleft = (x, y)
 
+    def find_by_name(self, name):
+        """
+        This function is not intended to be used on its own.
+
+        Returns a list containing this instance if its name matches the given one.
+
+        :param name: name to check
+        :type name: str
+        :return: list of elements
+        :rtype: list
+        """
+
+        result = list()
+        if self.name == name:
+            result.append(self)
+        return result
+
 
 class SpriteBehaviour:
     """
@@ -152,6 +177,7 @@ class Group(pygame.sprite.Group):
 
     def __init__(self, *sprites):
         super().__init__(sprites)
+        self.name = None
 
     def handle_event(self, event):
         """
@@ -186,3 +212,24 @@ class Group(pygame.sprite.Group):
 
         for sprite in reversed(self.sprites()):
             sprite.draw(surface)
+
+    def find_by_name(self, name):
+        """
+        Find elements of the given name.
+
+        Returns a list containing this Group instance if its name matches the given one and all the containing sprites
+        whose name matches the given one.
+
+        :param name: the name of elements to find
+        :type name: str
+        :return: list of elements
+        :rtype: list
+        """
+
+        result = list()
+        if self.name == name:
+            result.append(self)
+        for sprite in self.sprites():
+            if sprite.name == name:
+                result.append(sprite)
+        return result
