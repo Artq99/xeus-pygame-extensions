@@ -74,11 +74,12 @@ class Sprite(pygame.sprite.Sprite):
                         component.on_hover_exit()
 
     def _handle_mouse_button_up(self, event):
+        handled = False
         if event.type == MOUSEBUTTONUP and self.focus:
             for component in self.components:
                 if component.on_click(event.button):
-                    return True
-        return False
+                    handled = True
+        return handled
 
     def draw(self, surface):
         """
