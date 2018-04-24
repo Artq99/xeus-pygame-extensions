@@ -100,12 +100,21 @@ class SpriteBehaviour:
     """
     Base class for scripts controlling sprite behaviour.
 
-    Override the appropriate method and instantiate the descendant of this class
-    to Sprite.behaviour.
+    Override the appropriate method and add the instance to sprite.components list.
     """
 
     def __init__(self, sprite):
         self.sprite = sprite
+
+    def on_scene_loaded(self):
+        """
+        Method called when the scene has been loaded.
+
+        It is intended to use to initialize all the behaviour variables, that can be dependent on other scene elements,
+        that could be unavailable when __init__ method is called. Script attributes can be declared here, since it is
+        the first method called after initialization, however, the convention is to create them in __init__ method
+        and initialize them here later on.
+        """
 
     def on_update(self):
         """Method called on Sprite.update."""
@@ -114,9 +123,9 @@ class SpriteBehaviour:
         """
         Method called on Sprite.handle_event.
 
-        It is advised not to use this method to handle on_click, on_hover and on_hover_exit.
-        Override the corresponding methods instead. This method may return True if you wish
-        the game manager to stop checking if any sprite handled the given event after this call.
+        It is advised not to use this method to handle on_click, on_hover and on_hover_exit. Override the corresponding
+        methods instead. This method may return True if you wish the game manager to stop checking if any sprite handled
+        the given event after this call.
         """
 
     def on_click(self, button):

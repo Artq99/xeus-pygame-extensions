@@ -64,6 +64,9 @@ class SimpleSceneManager(SceneManagerBase):
             self._sprites.clear()
             for sprite in self._current_scene.sprites:
                 self._sprites.append(sprite)
+            for sprite in self._sprites:
+                for component in sprite.components:
+                    component.on_scene_loaded()
 
     def draw(self, surface):
         surface.fill((0, 0, 0))

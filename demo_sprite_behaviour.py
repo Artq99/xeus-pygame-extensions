@@ -13,9 +13,12 @@ class DemoSpriteBehaviour(SpriteBehaviour):
 
     def __init__(self, sprite):
         super().__init__(sprite)
-
         self.counter = 0
-        self.default_image = sprite.image
+        self.default_image = None
+        self.another_image = None
+
+    def on_scene_loaded(self):
+        self.default_image = self.sprite.image
         self.another_image = pygame.image.load(os.path.join('demo_resources', 'star2.png'))
 
     def on_update(self):
