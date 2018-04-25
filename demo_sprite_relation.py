@@ -3,7 +3,7 @@ import os
 from xpgext.application import XPGApplication
 from xpgext.scene_manager import SimpleSceneManager
 from xpgext.scene import SimpleScene
-from xpgext.sprite import Sprite, SpriteBehaviour
+from xpgext.sprite import XPGESprite, SpriteBehaviour
 
 
 class ToggleSprite(SpriteBehaviour):
@@ -24,12 +24,12 @@ class DemoScene(SimpleScene):
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
 
-        sprite1 = Sprite(self.scene_manager)
+        sprite1 = XPGESprite(self.scene_manager)
         sprite1.load_image(os.path.join('demo_resources', 'star.png'))
         sprite1.set_pos(10, 10)
         sprite1.components.append(ToggleSprite(sprite1))
 
-        sprite2 = Sprite(self.scene_manager)
+        sprite2 = XPGESprite(self.scene_manager)
         sprite2.name = 'sprite2'
         sprite2.load_image(os.path.join('demo_resources', 'star2.png'))
         sprite2.set_pos(200, 10)

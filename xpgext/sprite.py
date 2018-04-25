@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 
-class Sprite(pygame.sprite.Sprite):
+class XPGESprite(pygame.sprite.Sprite):
     """
     Base class for all the visible game elements.
     """
@@ -21,12 +21,6 @@ class Sprite(pygame.sprite.Sprite):
         self.focus = False
 
         self.name = None
-
-    def set_name(self, name):
-        self._name = name
-
-    def get_name(self):
-        return self._name
 
     def load_image(self, path):
         """
@@ -172,11 +166,11 @@ class SpriteBehaviour:
         """
 
 
-class Group(pygame.sprite.Group):
+class XPGEGroup(pygame.sprite.Group):
     """Group implementation adjusted to work with XPGE Sprite."""
 
     def __init__(self, *sprites):
-        super().__init__(sprites)
+        super().__init__(*sprites)
         self.name = None
 
     def handle_event(self, event):
@@ -196,15 +190,21 @@ class Group(pygame.sprite.Group):
 
     def update(self, *args):
         """
-        Update all the scene elements. Called every frame.
+        Call the update method of every sprite member in reversed order.
+
+        Overrides the default implementation from pygame.sprite.Group.
         """
 
         for sprite in reversed(self.sprites()):
-            sprite.update(args)
+            sprite.update(*args)
 
     def draw(self, surface):
         """
-        Draw all the scene elements on the given surface.
+        Draw all the member sprites onto the surface.
+
+        The method calls the draw method of each member XPGESprite.
+
+        Overrides the default implementation from pygame.sprite.Group.
 
         :param surface: the pygame main surface
         :type surface: pygame.Surface

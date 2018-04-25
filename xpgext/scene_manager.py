@@ -1,4 +1,4 @@
-from xpgext.sprite import Sprite, Group
+from xpgext.sprite import XPGESprite, XPGEGroup
 
 
 class SceneLoadingError(Exception):

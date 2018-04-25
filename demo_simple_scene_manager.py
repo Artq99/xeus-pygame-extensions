@@ -5,14 +5,14 @@ import pygame
 from xpgext.application import XPGApplication
 from xpgext.scene_manager import SimpleSceneManager
 from xpgext.scene import SimpleScene
-from xpgext.sprite import Sprite
+from xpgext.sprite import XPGESprite
 
 
 class DemoScene(SimpleScene):
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
 
-        demo_sprite = Sprite(self.scene_manager)
+        demo_sprite = XPGESprite(self.scene_manager)
         demo_sprite.load_image(os.path.join("demo_resources", "star.png"))
         demo_sprite.set_pos(270, 190)
         self.sprites.append(demo_sprite)
