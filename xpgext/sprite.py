@@ -8,7 +8,7 @@ class XPGESprite(pygame.sprite.Sprite):
     """
 
     def __init__(self, scene_manager, *groups):
-        super().__init__(groups)
+        super().__init__(*groups)
         self.scene_manager = scene_manager
         self.image = None
         self.rect = None
