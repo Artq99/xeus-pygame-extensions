@@ -130,3 +130,20 @@ class SimpleSceneManagerTest(TestCase):
         test_sprite_1.handle_event.assert_not_called()
         test_sprite_2.handle_event.assert_called_once_with(event)
         test_sprite_3.handle_event.assert_called_once_with(event)
+
+    def test_should_update(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        test_sprite_1 = Mock(spec=XPGESprite)
+        test_sprite_2 = Mock(spec=XPGESprite)
+        test_sprite_3 = Mock(spec=XPGESprite)
+        sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
+        simple_scene_manager._sprites = sprite_list
+
+        # when
+        simple_scene_manager.update()
+
+        # then
+        test_sprite_1.update.assert_called_once()
+        test_sprite_2.update.assert_called_once()
+        test_sprite_3.update.assert_called_once()
