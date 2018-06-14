@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock, MagicMock
 
 from pygame import Surface
+from pygame.event import Event
 
 from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError
 from xpgext.scene import SimpleScene
@@ -87,3 +88,45 @@ class SimpleSceneManagerTest(TestCase):
         test_sprite_1.draw.assert_called_once_with(surface)
         test_sprite_2.draw.assert_called_once_with(surface)
         test_sprite_3.draw.assert_called_once_with(surface)
+
+    def test_should_handle_event(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        test_sprite_1 = Mock(spec=XPGESprite)
+        test_sprite_1.handle_event = Mock(return_value=False)
+        test_sprite_2 = Mock(spec=XPGESprite)
+        test_sprite_2.handle_event = Mock(return_value=False)
+        test_sprite_3 = Mock(spec=XPGESprite)
+        test_sprite_3.handle_event = Mock(return_value=False)
+        sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
+        simple_scene_manager._sprites = sprite_list
+        event = Mock(spec=Event)
+
+        # when
+        simple_scene_manager.handle_event(event)
+
+        # then
+        test_sprite_1.handle_event.assert_called_once_with(event)
+        test_sprite_2.handle_event.assert_called_once_with(event)
+        test_sprite_3.handle_event.assert_called_once_with(event)
+
+    def test_should_stop_iteration_while_handling_event(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        test_sprite_1 = Mock(spec=XPGESprite)
+        test_sprite_1.handle_event = Mock(return_value=False)
+        test_sprite_2 = Mock(spec=XPGESprite)
+        test_sprite_2.handle_event = Mock(return_value=True)
+        test_sprite_3 = Mock(spec=XPGESprite)
+        test_sprite_3.handle_event = Mock(return_value=False)
+        sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
+        simple_scene_manager._sprites = sprite_list
+        event = Mock(spec=Event)
+
+        # when
+        simple_scene_manager.handle_event(event)
+
+        # then
+        test_sprite_1.handle_event.assert_not_called()
+        test_sprite_2.handle_event.assert_called_once_with(event)
+        test_sprite_3.handle_event.assert_called_once_with(event)
