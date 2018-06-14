@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock
 
-from xpgext.scene_manager import SimpleSceneManager
+from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError
 from xpgext.scene import SimpleScene
 from xpgext.sprite import XPGESprite, SpriteBehaviour
 
@@ -58,3 +58,11 @@ class SimpleSceneManagerTest(TestCase):
         simple_scene_manager._sprites.clear.assert_called_once()
         simple_scene_manager._sprites.append.assert_called_once_with(test_sprite)
         component_mock.on_scene_loaded.assert_called_once()
+
+    def test_should_not_load_scene_when_not_registered(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+
+        # when then
+        with self.assertRaises(SceneLoadingError):
+            simple_scene_manager.load_scene('test scene')

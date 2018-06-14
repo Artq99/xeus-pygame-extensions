@@ -1,6 +1,3 @@
-from xpgext.sprite import XPGESprite, XPGEGroup
-
-
 class SceneLoadingError(Exception):
     """Raised when loading a scene was unsuccessful."""
 
@@ -80,7 +77,7 @@ class SimpleSceneManager(SceneManagerBase):
     def load_scene(self, name):
         try:
             self._current_scene = self._scenes[name](self)
-        except IndexError:
+        except KeyError:
             raise SceneLoadingError("Scene {} has not been registered.".format(name))
         else:
             self._sprites.clear()
