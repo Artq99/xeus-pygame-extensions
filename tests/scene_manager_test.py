@@ -1,6 +1,8 @@
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock
 
+from pygame import Surface
+
 from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError
 from xpgext.scene import SimpleScene
 from xpgext.sprite import XPGESprite, SpriteBehaviour
@@ -66,3 +68,22 @@ class SimpleSceneManagerTest(TestCase):
         # when then
         with self.assertRaises(SceneLoadingError):
             simple_scene_manager.load_scene('test scene')
+
+    def test_should_draw_scene(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        test_sprite_1 = Mock(spec=XPGESprite)
+        test_sprite_2 = Mock(spec=XPGESprite)
+        test_sprite_3 = Mock(spec=XPGESprite)
+        sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
+        simple_scene_manager._sprites = sprite_list
+        surface = Mock(spec=Surface)
+
+        # when
+        simple_scene_manager.draw(surface)
+
+        # then
+        surface.fill.assert_called_once_with((0, 0, 0))
+        test_sprite_1.draw.assert_called_once_with(surface)
+        test_sprite_2.draw.assert_called_once_with(surface)
+        test_sprite_3.draw.assert_called_once_with(surface)
