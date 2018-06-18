@@ -147,3 +147,23 @@ class SimpleSceneManagerTest(TestCase):
         test_sprite_1.update.assert_called_once()
         test_sprite_2.update.assert_called_once()
         test_sprite_3.update.assert_called_once()
+
+    def test_should_find_sprite_by_name(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        test_sprite_1 = Mock(spec=XPGESprite)
+        test_sprite_1.find_by_name = Mock(return_value=[test_sprite_1])
+        test_sprite_2 = Mock(spec=XPGESprite)
+        test_sprite_2.find_by_name = Mock(return_value=[])
+        test_sprite_3 = Mock(spec=XPGESprite)
+        test_sprite_3.find_by_name = Mock(return_value=[])
+        sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
+        simple_scene_manager._sprites = sprite_list
+
+        # when
+        result = simple_scene_manager.find_by_name("test_sprite_1")
+
+        # then
+        self.assertIsNotNone(result)
+        self.assertEqual(1, len(result))
+        self.assertIn(test_sprite_1, result)
