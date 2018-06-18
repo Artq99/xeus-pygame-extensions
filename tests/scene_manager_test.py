@@ -167,3 +167,20 @@ class SimpleSceneManagerTest(TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(1, len(result))
         self.assertIn(test_sprite_1, result)
+
+    def test_should_return_empty_list_when_calling_find_sprite_by_name(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        test_sprite_2 = Mock(spec=XPGESprite)
+        test_sprite_2.find_by_name = Mock(return_value=[])
+        test_sprite_3 = Mock(spec=XPGESprite)
+        test_sprite_3.find_by_name = Mock(return_value=[])
+        sprite_list = [test_sprite_2, test_sprite_3]
+        simple_scene_manager._sprites = sprite_list
+
+        # when
+        result = simple_scene_manager.find_by_name("test_sprite_1")
+
+        # then
+        self.assertIsNotNone(result)
+        self.assertEqual(0, len(result))
