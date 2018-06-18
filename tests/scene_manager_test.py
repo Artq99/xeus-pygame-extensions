@@ -151,17 +151,15 @@ class SimpleSceneManagerTest(TestCase):
     def test_should_find_sprite_by_name(self):
         # given
         simple_scene_manager = SimpleSceneManager()
-        test_sprite_1 = Mock(spec=XPGESprite)
-        test_sprite_1.find_by_name = Mock(return_value=[test_sprite_1])
-        test_sprite_2 = Mock(spec=XPGESprite)
-        test_sprite_2.find_by_name = Mock(return_value=[])
-        test_sprite_3 = Mock(spec=XPGESprite)
-        test_sprite_3.find_by_name = Mock(return_value=[])
+        test_sprite_1 = XPGESprite(simple_scene_manager)
+        test_sprite_1.name = "test_name"
+        test_sprite_2 = XPGESprite(simple_scene_manager)
+        test_sprite_3 = XPGESprite(simple_scene_manager)
         sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
         simple_scene_manager._sprites = sprite_list
 
         # when
-        result = simple_scene_manager.find_by_name("test_sprite_1")
+        result = simple_scene_manager.find_by_name("test_name")
 
         # then
         self.assertIsNotNone(result)
@@ -171,15 +169,15 @@ class SimpleSceneManagerTest(TestCase):
     def test_should_return_empty_list_when_calling_find_sprite_by_name(self):
         # given
         simple_scene_manager = SimpleSceneManager()
-        test_sprite_2 = Mock(spec=XPGESprite)
-        test_sprite_2.find_by_name = Mock(return_value=[])
-        test_sprite_3 = Mock(spec=XPGESprite)
-        test_sprite_3.find_by_name = Mock(return_value=[])
-        sprite_list = [test_sprite_2, test_sprite_3]
+        test_sprite_1 = XPGESprite(simple_scene_manager)
+        test_sprite_1.name = "test_name_2"
+        test_sprite_2 = XPGESprite(simple_scene_manager)
+        test_sprite_3 = XPGESprite(simple_scene_manager)
+        sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
         simple_scene_manager._sprites = sprite_list
 
         # when
-        result = simple_scene_manager.find_by_name("test_sprite_1")
+        result = simple_scene_manager.find_by_name("test_name")
 
         # then
         self.assertIsNotNone(result)
