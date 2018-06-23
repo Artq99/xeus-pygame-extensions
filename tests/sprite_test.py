@@ -69,7 +69,7 @@ class SpriteComponentInteractionsTest(TestCase):
     def test_should_call_handle_event_on_single_component(self):
         # given
         event = Event(USEREVENT, dict())
-        component = Mock(SpriteBehaviour)
+        component = Mock(spec=SpriteBehaviour)
         sprite = XPGESprite(None)
         sprite.components.append(component)
 
@@ -78,3 +78,23 @@ class SpriteComponentInteractionsTest(TestCase):
 
         # then
         component.on_handle_event.assert_called_once_with(event)
+
+    def test_should_call_handle_event_on_many_components(self):
+        # given
+        event = Event(USEREVENT, dict())
+        component_mock_1 = Mock(spec=SpriteBehaviour)
+        component_mock_2 = Mock(spec=SpriteBehaviour)
+        component_mock_3 = Mock(spec=SpriteBehaviour)
+
+        sprite = XPGESprite(None)
+        sprite.components.append(component_mock_1)
+        sprite.components.append(component_mock_2)
+        sprite.components.append(component_mock_3)
+
+        # when
+        sprite.handle_event(event)
+
+        # then
+        component_mock_1.on_handle_event.assert_called_once_with(event)
+        component_mock_2.on_handle_event.assert_called_once_with(event)
+        component_mock_3.on_handle_event.assert_called_once_with(event)
