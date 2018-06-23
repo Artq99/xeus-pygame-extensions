@@ -4,7 +4,7 @@ from unittest.mock import Mock, MagicMock
 from pygame import Surface
 from pygame.event import Event
 
-from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError
+from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError, SceneRegisteringError
 from xpgext.scene import SimpleScene
 from xpgext.sprite import XPGESprite, SpriteBehaviour
 
@@ -31,6 +31,20 @@ class SimpleSceneManagerTest(TestCase):
         # then
         self.assertIn(test_scene, simple_scene_manager._scenes.values())
         self.assertIn(test_scene_name, simple_scene_manager._scenes.keys())
+
+    def test_should_not_overwrite_scene_on_registering(self):
+        # given
+
+        simple_scene_manager = SimpleSceneManager()
+        test_scene_name = "test scene"
+        test_scene_1 = SimpleScene(simple_scene_manager)
+        test_scene_2 = SimpleScene(simple_scene_manager)
+
+        simple_scene_manager.register_scene(test_scene_1, test_scene_name)
+
+        # when then
+        with self.assertRaises(SceneRegisteringError):
+            simple_scene_manager.register_scene(test_scene_2, test_scene_name)
 
     def test_should_load_scene(self):
         # given
