@@ -4,7 +4,7 @@ from unittest.mock import Mock, MagicMock
 from pygame import Surface
 from pygame.event import Event
 
-from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError
+from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError, SceneRegisteringError
 from xpgext.scene import SimpleScene
 from xpgext.sprite import XPGESprite, SpriteBehaviour
 
@@ -43,7 +43,7 @@ class SimpleSceneManagerTest(TestCase):
         simple_scene_manager.register_scene(test_scene_1, test_scene_name)
 
         # when then
-        with self.assertRaises(Exception):
+        with self.assertRaises(SceneRegisteringError):
             simple_scene_manager.register_scene(test_scene_2, test_scene_name)
 
     def test_should_load_scene(self):
