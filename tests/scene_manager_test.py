@@ -32,6 +32,20 @@ class SimpleSceneManagerTest(TestCase):
         self.assertIn(test_scene, simple_scene_manager._scenes.values())
         self.assertIn(test_scene_name, simple_scene_manager._scenes.keys())
 
+    def test_should_not_overwrite_scene_on_registering(self):
+        # given
+
+        simple_scene_manager = SimpleSceneManager()
+        test_scene_name = "test scene"
+        test_scene_1 = SimpleScene(simple_scene_manager)
+        test_scene_2 = SimpleScene(simple_scene_manager)
+
+        simple_scene_manager.register_scene(test_scene_1, test_scene_name)
+
+        # when then
+        with self.assertRaises(Exception):
+            simple_scene_manager.register_scene(test_scene_2, test_scene_name)
+
     def test_should_load_scene(self):
         # given
         simple_scene_manager = SimpleSceneManager()
