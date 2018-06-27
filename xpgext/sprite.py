@@ -58,22 +58,23 @@ class XPGESprite(pygame.sprite.Sprite):
             for component in self.components:
                 if component.on_handle_event(event):
                     handled = True
-
+                    break
         return handled
 
     def _handle_mouse_motion(self, event):
         if event.type == MOUSEMOTION and self.take_focus:
             self._previous_focus = self.focus
-            if self.rect.collidepoint(event.pos):
-                self.focus = True
+            self.focus = self.rect.collidepoint(event.pos)
+            self._handle_hover()
+
+    def _handle_hover(self):
+        if self.focus is self._previous_focus:
+            return None
+        for component in self.components:
+            if self.focus:
+                component.on_hover()
             else:
-                self.focus = False
-            if self.focus is not self._previous_focus:
-                for component in self.components:
-                    if self.focus:
-                        component.on_hover()
-                    else:
-                        component.on_hover_exit()
+                component.on_hover_exit()
 
     def _handle_mouse_button_up(self, event):
         handled = False
@@ -81,6 +82,7 @@ class XPGESprite(pygame.sprite.Sprite):
             for component in self.components:
                 if component.on_click(event.button):
                     handled = True
+                    break
         return handled
 
     def draw(self, surface):
