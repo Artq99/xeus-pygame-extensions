@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from pygame.event import Event
-from pygame import Rect, USEREVENT, MOUSEMOTION
+from pygame import Rect, Surface, USEREVENT, MOUSEMOTION
 
 from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
 
@@ -181,5 +181,15 @@ class XPGESpriteTest(TestCase):
         component_3.on_hover_exit.assert_called_once()
 
     def test_should_draw_sprite_onto_surface(self):
-        pass
+        # given
+        sprite = XPGESprite(None)
+        sprite.rect = Rect(0, 0, 100, 100)
+        sprite.image = Surface((100, 100))
 
+        surface = Mock(spec=Surface)
+
+        # when
+        sprite.draw(surface)
+
+        # then
+        surface.blit.assert_called_once_with(sprite.image, sprite.rect.topleft)
