@@ -8,6 +8,7 @@ from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
 
 MOUSE_POS = (50, 50)
 TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE = Event(MOUSEMOTION, {'pos': (50, 50)})
+TEST_MOUSEMOTION_EVENT_WITH_POS_OUTSIDE_SPRITE = Event(MOUSEMOTION, {'pos': (200, 200)})
 
 
 class XPGESpriteTest(TestCase):
@@ -160,7 +161,24 @@ class XPGESpriteTest(TestCase):
         component_3.on_hover.assert_called_once()
 
     def test_should_call_on_hover_exit_on_components(self):
-        pass
+        # given
+        sprite = XPGESprite(None)
+        sprite.rect = Rect(0, 0, 100, 100)
+        sprite.focus = True
+        component_1 = Mock(spec=SpriteBehaviour)
+        component_2 = Mock(spec=SpriteBehaviour)
+        component_3 = Mock(spec=SpriteBehaviour)
+        sprite.components.append(component_1)
+        sprite.components.append(component_2)
+        sprite.components.append(component_3)
+
+        # when
+        sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_OUTSIDE_SPRITE)
+
+        # then
+        component_1.on_hover_exit.assert_called_once()
+        component_2.on_hover_exit.assert_called_once()
+        component_3.on_hover_exit.assert_called_once()
 
     def test_should_draw_sprite_onto_surface(self):
         pass
