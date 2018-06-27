@@ -1,4 +1,9 @@
-from xpgext.sprite import XPGESprite, XPGEGroup
+SCENE_NOT_REGISTERED_ = "Scene {} has not been registered."
+SCENE_ALREADY_REGISTERED_ = "Scene {} has already been registered."
+
+
+class SceneRegisteringError(Exception):
+    """Raised when registering a scene was unsuccessful."""
 
 
 class SceneLoadingError(Exception):
@@ -75,13 +80,15 @@ class SimpleSceneManager(SceneManagerBase):
         self._sprites = list()
 
     def register_scene(self, scene, name):
+        if name in self._scenes.keys():
+            raise SceneRegisteringError(SCENE_ALREADY_REGISTERED_.format(name))
         self._scenes[name] = scene
 
     def load_scene(self, name):
         try:
             self._current_scene = self._scenes[name](self)
-        except IndexError:
-            raise SceneLoadingError("Scene {} has not been registered.".format(name))
+        except KeyError:
+            raise SceneLoadingError(SCENE_NOT_REGISTERED_.format(name))
         else:
             self._sprites.clear()
             for sprite in self._current_scene.sprites:
