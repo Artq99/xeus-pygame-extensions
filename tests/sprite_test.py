@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from pygame.event import Event
-from pygame import Rect, Surface, USEREVENT, MOUSEMOTION
+from pygame import Rect, Surface, USEREVENT, MOUSEMOTION, MOUSEBUTTONUP
 
 from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
 
@@ -15,6 +15,7 @@ MOUSE_POS_OUTSIDE_SPRITE = (200, 200)
 TEST_USEREVENT = Event(USEREVENT, dict())
 TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE = Event(MOUSEMOTION, {'pos': MOUSE_POS_INSIDE_SPRITE})
 TEST_MOUSEMOTION_EVENT_WITH_POS_OUTSIDE_SPRITE = Event(MOUSEMOTION, {'pos': MOUSE_POS_OUTSIDE_SPRITE})
+TEST_MOUSEBUTTONUP_EVENT_WITH_POS_INSIDE_SPRITE = Event(MOUSEBUTTONUP, {'pos': MOUSE_POS_INSIDE_SPRITE, 'button': 0})
 
 
 class XPGESpriteTest(TestCase):
@@ -61,6 +62,21 @@ class XPGESpriteTest(TestCase):
         self.component_1.on_update.assert_called_once()
         self.component_2.on_update.assert_called_once()
         self.component_3.on_update.assert_called_once()
+
+    def test_should_call_on_click_on_components(self):
+        # given
+        self.sprite.focus = True
+        self.component_1.on_click = Mock(return_value=False)
+        self.component_2.on_click = Mock(return_value=False)
+        self.component_3.on_click = Mock(return_value=False)
+
+        # when
+        self.sprite.handle_event(TEST_MOUSEBUTTONUP_EVENT_WITH_POS_INSIDE_SPRITE)
+
+        # then
+        self.component_1.on_click.assert_called_once_with(0)
+        self.component_2.on_click.assert_called_once_with(0)
+        self.component_3.on_click.assert_called_once_with(0)
 
     def test_should_call_handle_event_on_components(self):
         # given
