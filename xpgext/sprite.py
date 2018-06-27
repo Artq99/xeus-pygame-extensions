@@ -58,6 +58,7 @@ class XPGESprite(pygame.sprite.Sprite):
             for component in self.components:
                 if component.on_handle_event(event):
                     handled = True
+                    break
 
         return handled
 

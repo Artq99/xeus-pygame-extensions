@@ -63,6 +63,11 @@ class XPGESpriteTest(TestCase):
         self.component_3.on_update.assert_called_once()
 
     def test_should_call_handle_event_on_components(self):
+        # given
+        self.component_1.on_handle_event = Mock(return_value=False)
+        self.component_2.on_handle_event = Mock(return_value=False)
+        self.component_3.on_handle_event = Mock(return_value=False)
+
         # when
         self.sprite.handle_event(TEST_USEREVENT)
 
@@ -70,6 +75,19 @@ class XPGESpriteTest(TestCase):
         self.component_1.on_handle_event.assert_called_once_with(TEST_USEREVENT)
         self.component_2.on_handle_event.assert_called_once_with(TEST_USEREVENT)
         self.component_3.on_handle_event.assert_called_once_with(TEST_USEREVENT)
+
+    def test_should_not_call_handle_event_on_last_component(self):
+        # given
+        self.component_1.on_handle_event = Mock(return_value=False)
+        self.component_2.on_handle_event = Mock(return_value=True)
+
+        # when
+        self.sprite.handle_event(TEST_USEREVENT)
+
+        # then
+        self.component_1.on_handle_event.assert_called_once_with(TEST_USEREVENT)
+        self.component_2.on_handle_event.assert_called_once_with(TEST_USEREVENT)
+        self.component_3.on_handle_event.assert_not_called()
 
     def test_should_set_sprite_focus_to_true(self):
         # given
