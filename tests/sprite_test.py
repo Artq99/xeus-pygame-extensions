@@ -6,6 +6,9 @@ from pygame import Rect, USEREVENT, MOUSEMOTION
 
 from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
 
+MOUSE_POS = (50, 50)
+TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE = Event(MOUSEMOTION, {'pos': (50, 50)})
+
 
 class XPGESpriteTest(TestCase):
     """Test class for XPGESprite class."""
@@ -101,14 +104,11 @@ class XPGESpriteTest(TestCase):
         sprite.rect = Mock(spec=Rect)
         sprite.rect.collidepoint = Mock(return_value=True)
 
-        mouse_pos = (50, 50)
-        event = Event(MOUSEMOTION, {'pos': mouse_pos})
-
         # when
-        sprite.handle_event(event)
+        sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        sprite.rect.collidepoint.assert_called_once_with(mouse_pos)
+        sprite.rect.collidepoint.assert_called_once_with(MOUSE_POS)
         self.assertTrue(sprite.focus)
 
     def test_should_set_sprite_focus_to_false(self):
@@ -117,14 +117,11 @@ class XPGESpriteTest(TestCase):
         sprite.rect = Mock(spec=Rect)
         sprite.rect.collidepoint = Mock(return_value=False)
 
-        mouse_pos = (50, 50)
-        event = Event(MOUSEMOTION, {'pos': mouse_pos})
-
         # when
-        sprite.handle_event(event)
+        sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        sprite.rect.collidepoint.assert_called_once_with(mouse_pos)
+        sprite.rect.collidepoint.assert_called_once_with(MOUSE_POS)
         self.assertFalse(sprite.focus)
 
     def test_should_not_change_focus_when_take_focus_is_false(self):
@@ -143,16 +140,26 @@ class XPGESpriteTest(TestCase):
         sprite.rect.collidepoint.assert_not_called()
         self.assertFalse(sprite.focus)
 
-    def test_should_call_on_hover_on_one_component(self):
-        pass
+    def test_should_call_on_hover_on_components(self):
+        # given
+        sprite = XPGESprite(None)
+        sprite.rect = Rect(0, 0, 100, 100)
+        component_1 = Mock(spec=SpriteBehaviour)
+        component_2 = Mock(spec=SpriteBehaviour)
+        component_3 = Mock(spec=SpriteBehaviour)
+        sprite.components.append(component_1)
+        sprite.components.append(component_2)
+        sprite.components.append(component_3)
 
-    def test_should_call_on_hover_on_many_components(self):
-        pass
+        # when
+        sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
-    def test_should_call_on_hover_exit_on_one_component(self):
-        pass
+        # then
+        component_1.on_hover.assert_called_once()
+        component_2.on_hover.assert_called_once()
+        component_3.on_hover.assert_called_once()
 
-    def test_should_call_on_hover_exit_on_many_components(self):
+    def test_should_call_on_hover_exit_on_components(self):
         pass
 
     def test_should_draw_sprite_onto_surface(self):
