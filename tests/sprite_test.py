@@ -7,8 +7,8 @@ from pygame import USEREVENT
 from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
 
 
-class SpriteGroupRelationTest(TestCase):
-    """Test class validating the functioning of the relation between sprites and groups."""
+class XPGESpriteTest(TestCase):
+    """Test class for XPGESprite class."""
 
     def test_should_add_sprite_to_group_on_creation(self):
         # given when
@@ -30,10 +30,6 @@ class SpriteGroupRelationTest(TestCase):
         self.assertTrue(group2.has(sprite))
         self.assertEqual(0, sprite.groups().index(group1))
         self.assertEqual(1, sprite.groups().index(group2))
-
-
-class SpriteComponentInteractionsTest(TestCase):
-    """Test case for validating if a sprite handles its components in a proper way."""
 
     def test_should_update_single_component(self):
         # given
