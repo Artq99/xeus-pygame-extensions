@@ -128,7 +128,20 @@ class XPGESpriteTest(TestCase):
         self.assertFalse(sprite.focus)
 
     def test_should_not_change_focus_when_take_focus_is_false(self):
-        pass
+        # given
+        sprite = XPGESprite(None)
+        sprite.take_focus = False
+        sprite.rect = Mock(spec=Rect)
+
+        mouse_pos = (50, 50)
+        event = Event(MOUSEMOTION, {'pos': mouse_pos})
+
+        # when
+        sprite.handle_event(event)
+
+        # then
+        sprite.rect.collidepoint.assert_not_called()
+        self.assertFalse(sprite.focus)
 
     def test_should_call_on_hover_on_one_component(self):
         pass
