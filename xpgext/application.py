@@ -15,39 +15,75 @@ class XPGApplication:
     """
 
     def __init__(self, scene_manager, resolution, *args, **kwargs):
-        self.scene_manager = scene_manager
         self._surface = pygame.display.set_mode(resolution, *args, **kwargs)
-        self._frame_rate = 30
         self._clock = pygame.time.Clock()
 
-        self.running = False
+        self._scene_manager = scene_manager
+        self._frame_rate = 30
+        self._is_running = False
+
+    @property
+    def scene_manager(self):
+        """
+        Get the scene manager used by the application.
+
+        :return: scene manager instance
+        :rtype: SimpleSceneManager
+        """
+
+        return self._scene_manager
+
+    @property
+    def frame_rate(self):
+        """
+        Get the desired frame rate.
+
+        This is not the computed real frame rate on which the application currently runs, but the desired value.
+
+        :return: desired frame rate
+        :rtype: int
+        """
+
+        return self._frame_rate
+
+    @frame_rate.setter
+    def frame_rate(self, value):
+        """
+        Set the desired frame rate.
+
+        :param value: desired frame rate
+        :type value: int
+        """
+
+        self._frame_rate = value
+
+    @property
+    def is_running(self):
+        """
+        Get the state of the application.
+
+        :return: is the application running?
+        :rtype: bool
+        """
+
+        return self._is_running
 
     def on_quit(self):
         """Method called on pygame.QUIT event."""
 
-        self.running = False
-
-    def set_frame_rate(self, frame_rate):
-        """
-        Set the desired frame rate.
-
-        :param frame_rate: the desired frame rate
-        :type frame_rate: int
-        """
-
-        self._frame_rate = frame_rate
+        self._is_running = False
 
     def run_main_loop(self):
         """Run the main loop of the application."""
 
-        self.running = True
-        while self.running:
+        self._is_running = True
+        while self._is_running:
             self._clock.tick(self._frame_rate)
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.on_quit()
                 else:
-                    self.scene_manager.handle_event(event)
-            self.scene_manager.update()
-            self.scene_manager.draw(self._surface)
+                    self._scene_manager.handle_event(event)
+            self._scene_manager.update()
+            self._scene_manager.draw(self._surface)
             pygame.display.flip()
