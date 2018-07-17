@@ -9,7 +9,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self.scene_manager = scene_manager
         self.image = None
         self.rect = None
         self.active = True
@@ -21,6 +20,19 @@ class XPGESprite(pygame.sprite.Sprite):
         self.focus = False
 
         self.name = None
+
+        self._scene_manager = scene_manager
+
+    @property
+    def scene_manager(self):
+        """
+        Get the scene manager that governs this sprite.
+
+        :return: scene manager instance
+        :rtype: SimpleSceneManager
+        """
+
+        return self._scene_manager
 
     def load_image(self, path):
         """
