@@ -9,8 +9,7 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self.image = None
-        self.rect = None
+        self._rect = None
         self.active = True
         self.take_focus = True
         self.interacts_with_mouse = True
@@ -22,6 +21,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self.name = None
 
         self._scene_manager = scene_manager
+        self._image = None
 
     @property
     def scene_manager(self):
@@ -34,6 +34,29 @@ class XPGESprite(pygame.sprite.Sprite):
 
         return self._scene_manager
 
+    @property
+    def image(self):
+        """
+        Get the loaded image of the sprite.
+
+        :return: image
+        :rtype: pygame.Surface
+        """
+
+        return self._image
+
+    @image.setter
+    def image(self, surface):
+        """
+        Set the image of the sprite to the given surface object.
+
+        :param surface: new image
+        :type surface: pygame.Surface
+        """
+
+        self._image = surface
+        self._rect = self._image.get_rect()
+
     def load_image(self, path):
         """
         Load image from the given path.
@@ -42,8 +65,8 @@ class XPGESprite(pygame.sprite.Sprite):
         :type path: str
         """
 
-        self.image = pygame.image.load(path).convert()
-        self.rect = self.image.get_rect()
+        self._image = pygame.image.load(path).convert()
+        self._rect = self._image.get_rect()
 
     def update(self):
         """
@@ -76,7 +99,7 @@ class XPGESprite(pygame.sprite.Sprite):
     def _handle_mouse_motion(self, event):
         if event.type == MOUSEMOTION and self.take_focus:
             self._previous_focus = self.focus
-            self.focus = self.rect.collidepoint(event.pos)
+            self.focus = self._rect.collidepoint(event.pos)
             self._handle_hover()
 
     def _handle_hover(self):
@@ -106,10 +129,10 @@ class XPGESprite(pygame.sprite.Sprite):
         """
 
         if self.active:
-            surface.blit(self.image, self.rect.topleft)
+            surface.blit(self._image, self._rect.topleft)
 
     def set_pos(self, x, y):
-        self.rect.topleft = (x, y)
+        self._rect.topleft = (x, y)
 
     def find_by_name(self, name):
         """
