@@ -21,7 +21,7 @@ class XPGESprite(pygame.sprite.Sprite):
 
         self._scene_manager = scene_manager
         self._image = None
-        self._rect = None
+        self._rect = pygame.Rect(0, 0, 0, 0)
 
     @property
     def scene_manager(self):
@@ -55,7 +55,8 @@ class XPGESprite(pygame.sprite.Sprite):
         """
 
         self._image = surface
-        self._rect = self._image.get_rect()
+        self._rect.width = self._image.get_rect().width
+        self._rect.height = self._image.get_rect().height
 
     @property
     def rect(self):
@@ -67,17 +68,6 @@ class XPGESprite(pygame.sprite.Sprite):
         """
 
         return self._rect
-
-    def load_image(self, path):
-        """
-        Load image from the given path.
-
-        :param path: path to an image file
-        :type path: str
-        """
-
-        self._image = pygame.image.load(path).convert()
-        self._rect = self._image.get_rect()
 
     def update(self):
         """

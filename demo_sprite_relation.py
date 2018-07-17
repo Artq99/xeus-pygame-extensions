@@ -1,5 +1,7 @@
 import os
 
+import pygame
+
 from xpgext.application import XPGApplication
 from xpgext.scene_manager import SimpleSceneManager
 from xpgext.scene import SimpleScene
@@ -24,14 +26,17 @@ class DemoScene(SimpleScene):
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
 
+        star1 = pygame.image.load(os.path.join("demo_resources", "star.png")).convert()
+        star2 = pygame.image.load(os.path.join("demo_resources", "star2.png")).convert()
+
         sprite1 = XPGESprite(self.scene_manager)
-        sprite1.load_image(os.path.join('demo_resources', 'star.png'))
+        sprite1.image = star1
         sprite1.set_pos(10, 10)
         sprite1.components.append(ToggleSprite(sprite1))
 
         sprite2 = XPGESprite(self.scene_manager)
         sprite2.name = 'sprite2'
-        sprite2.load_image(os.path.join('demo_resources', 'star2.png'))
+        sprite2.image = star2
         sprite2.set_pos(200, 10)
 
         self.sprites.append(sprite1)
