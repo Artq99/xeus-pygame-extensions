@@ -145,7 +145,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_not_change_focus_when_take_focus_is_false(self):
         # given
-        self.sprite.take_focus = False
+        self.sprite._takes_focus = False
         self.sprite._rect = Mock(spec=Rect)
 
         # when

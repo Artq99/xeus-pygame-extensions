@@ -9,7 +9,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self.take_focus = True
         self.interacts_with_mouse = True
         self.components = list()
 
@@ -22,6 +21,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self._image = None
         self._rect = pygame.Rect(0, 0, 0, 0)
         self._is_active = True
+        self._takes_focus = True
 
     @property
     def scene_manager(self):
@@ -79,6 +79,16 @@ class XPGESprite(pygame.sprite.Sprite):
     def is_active(self, value):
         self._is_active = value
 
+    @property
+    def takes_focus(self):
+        """The property determining whether the sprite can be targeted by the mouse cursor."""
+
+        return self._takes_focus
+
+    @takes_focus.setter
+    def takes_focus(self, value):
+        self._takes_focus = value
+
     def update(self):
         """
         Update sprite and call on_update methods from each of its components.
@@ -108,7 +118,7 @@ class XPGESprite(pygame.sprite.Sprite):
         return handled
 
     def _handle_mouse_motion(self, event):
-        if event.type == MOUSEMOTION and self.take_focus:
+        if event.type == MOUSEMOTION and self._takes_focus:
             self._previous_focus = self.focus
             self.focus = self._rect.collidepoint(event.pos)
             self._handle_hover()
