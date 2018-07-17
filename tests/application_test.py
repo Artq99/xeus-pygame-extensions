@@ -34,5 +34,5 @@ class XPGApplicationTest(TestCase):
         run_with_timeout(1, application.run_main_loop)
 
         # then
-        self.assertTrue(application.running)
+        self.assertTrue(application.is_running)
         self.scene_manager_mock.update.assert_called()
