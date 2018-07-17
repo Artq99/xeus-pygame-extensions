@@ -9,7 +9,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self._rect = None
         self.active = True
         self.take_focus = True
         self.interacts_with_mouse = True
@@ -22,6 +21,7 @@ class XPGESprite(pygame.sprite.Sprite):
 
         self._scene_manager = scene_manager
         self._image = None
+        self._rect = None
 
     @property
     def scene_manager(self):
@@ -56,6 +56,17 @@ class XPGESprite(pygame.sprite.Sprite):
 
         self._image = surface
         self._rect = self._image.get_rect()
+
+    @property
+    def rect(self):
+        """
+        Get the rectangle of the sprite.
+
+        :return: rect object
+        :rtype: pygame.Rect
+        """
+
+        return self._rect
 
     def load_image(self, path):
         """
