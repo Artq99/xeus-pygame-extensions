@@ -9,7 +9,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self.active = True
         self.take_focus = True
         self.interacts_with_mouse = True
         self.components = list()
@@ -22,14 +21,16 @@ class XPGESprite(pygame.sprite.Sprite):
         self._scene_manager = scene_manager
         self._image = None
         self._rect = pygame.Rect(0, 0, 0, 0)
+        self._is_active = True
 
     @property
     def scene_manager(self):
         """
-        Get the scene manager that governs this sprite.
+        The scene manager that governs the sprite, given on initialisation.
 
-        :return: scene manager instance
-        :rtype: SimpleSceneManager
+        The sprite has a reference to the scene manager, so it has the access to all the information about the scene,
+        and, thus, to all the other sprites. This way it can interact with them or cause the scene manager to make
+        certain actions not directly related to any sprite, like, for example, opening a UI window.
         """
 
         return self._scene_manager
@@ -37,23 +38,17 @@ class XPGESprite(pygame.sprite.Sprite):
     @property
     def image(self):
         """
-        Get the loaded image of the sprite.
+        The image of the sprite.
 
-        :return: image
-        :rtype: pygame.Surface
+        The instance of pygame.Surface assigned to this property will be the image representing this sprite object
+        on the screen. What is more, on assignment, the width and height property of the rect of the sprite will be
+        adjusted to the size of the new surface.
         """
 
         return self._image
 
     @image.setter
     def image(self, surface):
-        """
-        Set the image of the sprite to the given surface object.
-
-        :param surface: new image
-        :type surface: pygame.Surface
-        """
-
         self._image = surface
         self._rect.width = self._image.get_rect().width
         self._rect.height = self._image.get_rect().height
@@ -61,20 +56,35 @@ class XPGESprite(pygame.sprite.Sprite):
     @property
     def rect(self):
         """
-        Get the rectangle of the sprite.
+        The rectangle of the sprite.
 
-        :return: rect object
-        :rtype: pygame.Rect
+        The instance of pygame.Rect holding information about the position and the size of the sprite.
         """
 
         return self._rect
+
+    @property
+    def is_active(self):
+        """
+        Status of the sprite.
+
+        Sprite can exist in the scene, but when this property is set to False, it is not being rendered,
+        and it does not react to any input. It is a convenient way to 'turn off' the sprite without loosing its
+        settings.
+        """
+
+        return self._is_active
+
+    @is_active.setter
+    def is_active(self, value):
+        self._is_active = value
 
     def update(self):
         """
         Update sprite and call on_update methods from each of its components.
         """
 
-        if self.active:
+        if self._is_active:
             for component in self.components:
                 component.on_update()
 
@@ -86,7 +96,7 @@ class XPGESprite(pygame.sprite.Sprite):
         :type event: pygame.event.Event
         """
 
-        if not self.active:
+        if not self._is_active:
             return False
         self._handle_mouse_motion(event)
         handled = self._handle_mouse_button_up(event)
@@ -129,7 +139,7 @@ class XPGESprite(pygame.sprite.Sprite):
         :type surface: pygame.Surface
         """
 
-        if self.active:
+        if self._is_active:
             surface.blit(self._image, self._rect.topleft)
 
     def set_pos(self, x, y):
