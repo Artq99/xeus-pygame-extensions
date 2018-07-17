@@ -18,7 +18,7 @@ class ToggleSprite(SpriteBehaviour):
         self.sprite_to_toggle = self.sprite.scene_manager.get_by_name('sprite2')
 
     def on_click(self, button):
-        self.sprite_to_toggle.active = not self.sprite_to_toggle.active
+        self.sprite_to_toggle.is_active = not self.sprite_to_toggle.is_active
 
 
 class DemoScene(SimpleScene):

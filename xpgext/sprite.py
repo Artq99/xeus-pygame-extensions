@@ -9,7 +9,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self.interacts_with_mouse = True
         self.components = list()
 
         self._previous_focus = False
