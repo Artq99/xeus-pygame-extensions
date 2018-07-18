@@ -48,7 +48,7 @@ class DemoScene(SimpleScene):
 
         demo_sprite = XPGESprite(self.scene_manager)
         demo_sprite.image = star
-        demo_sprite.set_pos(270, 190)
+        demo_sprite.position = (270, 190)
         demo_sprite._components.append(DemoSpriteBehaviour(demo_sprite))
         self.sprites.append(demo_sprite)
 

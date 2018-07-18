@@ -123,6 +123,20 @@ class XPGESprite(pygame.sprite.Sprite):
     def name(self, new_name):
         self._name = new_name
 
+    @property
+    def position(self):
+        """
+        The position of the sprite on the screen.
+
+        This property is a shortcut for operating on the property topleft of the rectangle of the sprite.
+        """
+
+        return self._rect.topleft
+
+    @position.setter
+    def position(self, new_position):
+        self._rect.topleft = new_position
+
     def update(self):
         """
         Update sprite and call on_update methods from each of its components.
@@ -185,9 +199,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
         if self._is_active:
             surface.blit(self._image, self._rect.topleft)
-
-    def set_pos(self, x, y):
-        self._rect.topleft = (x, y)
 
     def find_by_name(self, name):
         """
