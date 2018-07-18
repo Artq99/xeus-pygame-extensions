@@ -166,7 +166,7 @@ class SimpleSceneManagerTest(TestCase):
         # given
         simple_scene_manager = SimpleSceneManager()
         test_sprite_1 = XPGESprite(simple_scene_manager)
-        test_sprite_1.name = "test_name"
+        test_sprite_1._name = "test_name"
         test_sprite_2 = XPGESprite(simple_scene_manager)
         test_sprite_3 = XPGESprite(simple_scene_manager)
         sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
@@ -184,7 +184,7 @@ class SimpleSceneManagerTest(TestCase):
         # given
         simple_scene_manager = SimpleSceneManager()
         test_sprite_1 = XPGESprite(simple_scene_manager)
-        test_sprite_1.name = "test_name_2"
+        test_sprite_1._name = "test_name_2"
         test_sprite_2 = XPGESprite(simple_scene_manager)
         test_sprite_3 = XPGESprite(simple_scene_manager)
         sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
@@ -201,7 +201,7 @@ class SimpleSceneManagerTest(TestCase):
         # given
         simple_scene_manager = SimpleSceneManager()
         test_sprite_1 = XPGESprite(simple_scene_manager)
-        test_sprite_1.name = "test_name"
+        test_sprite_1._name = "test_name"
         test_sprite_2 = XPGESprite(simple_scene_manager)
         test_sprite_3 = XPGESprite(simple_scene_manager)
         sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]
@@ -218,7 +218,7 @@ class SimpleSceneManagerTest(TestCase):
         # given
         simple_scene_manager = SimpleSceneManager()
         test_sprite_1 = XPGESprite(simple_scene_manager)
-        test_sprite_1.name = "test_name_2"
+        test_sprite_1._name = "test_name_2"
         test_sprite_2 = XPGESprite(simple_scene_manager)
         test_sprite_3 = XPGESprite(simple_scene_manager)
         sprite_list = [test_sprite_1, test_sprite_2, test_sprite_3]

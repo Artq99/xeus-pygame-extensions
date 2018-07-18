@@ -12,8 +12,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
         self._previous_focus = False
 
-        self.name = None
-
         self._scene_manager = scene_manager
         self._image = None
         self._rect = pygame.Rect(0, 0, 0, 0)
@@ -21,6 +19,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self._takes_focus = True
         self._components = list()
         self._focus = False
+        self._name = None
 
     @property
     def scene_manager(self):
@@ -95,7 +94,7 @@ class XPGESprite(pygame.sprite.Sprite):
 
         These are the descendants of the class SpriteBehaviour that control all the actions of the sprite.
         """
-        
+
         return self._components
 
     @property
@@ -108,6 +107,21 @@ class XPGESprite(pygame.sprite.Sprite):
         """
 
         return self._focus
+
+    @property
+    def name(self):
+        """
+        The name of the sprite.
+
+        This string is a custom name that can be later used to search for the sprite by the methods find_by_name
+        and get_by_name in the scene manager.
+        """
+
+        return self._name
+
+    @name.setter
+    def name(self, new_name):
+        self._name = new_name
 
     def update(self):
         """
@@ -188,7 +202,7 @@ class XPGESprite(pygame.sprite.Sprite):
         """
 
         result = list()
-        if self.name == name:
+        if self._name == name:
             result.append(self)
         return result
 
