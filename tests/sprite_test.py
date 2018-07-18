@@ -65,7 +65,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_call_on_click_on_components(self):
         # given
-        self.sprite.focus = True
+        self.sprite._focus = True
         self.component_1.on_click = Mock(return_value=False)
         self.component_2.on_click = Mock(return_value=False)
         self.component_3.on_click = Mock(return_value=False)
@@ -80,7 +80,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_not_call_on_click_on_last_component(self):
         # given
-        self.sprite.focus = True
+        self.sprite._focus = True
         self.component_1.on_click = Mock(return_value=False)
         self.component_2.on_click = Mock(return_value=True)
 
@@ -129,7 +129,7 @@ class XPGESpriteTest(TestCase):
 
         # then
         self.sprite._rect.collidepoint.assert_called_once_with(MOUSE_POS_INSIDE_SPRITE)
-        self.assertTrue(self.sprite.focus)
+        self.assertTrue(self.sprite._focus)
 
     def test_should_set_sprite_focus_to_false(self):
         # given
@@ -141,7 +141,7 @@ class XPGESpriteTest(TestCase):
 
         # then
         self.sprite._rect.collidepoint.assert_called_once_with(MOUSE_POS_INSIDE_SPRITE)
-        self.assertFalse(self.sprite.focus)
+        self.assertFalse(self.sprite._focus)
 
     def test_should_not_change_focus_when_take_focus_is_false(self):
         # given
@@ -153,7 +153,7 @@ class XPGESpriteTest(TestCase):
 
         # then
         self.sprite._rect.collidepoint.assert_not_called()
-        self.assertFalse(self.sprite.focus)
+        self.assertFalse(self.sprite._focus)
 
     def test_should_call_on_hover_on_components(self):
         # when
@@ -166,7 +166,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_call_on_hover_exit_on_components(self):
         # given
-        self.sprite.focus = True
+        self.sprite._focus = True
 
         # when
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_OUTSIDE_SPRITE)

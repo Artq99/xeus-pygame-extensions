@@ -11,7 +11,6 @@ class XPGESprite(pygame.sprite.Sprite):
         super().__init__(*groups)
 
         self._previous_focus = False
-        self.focus = False
 
         self.name = None
 
@@ -21,6 +20,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self._is_active = True
         self._takes_focus = True
         self._components = list()
+        self._focus = False
 
     @property
     def scene_manager(self):
@@ -95,7 +95,19 @@ class XPGESprite(pygame.sprite.Sprite):
 
         These are the descendants of the class SpriteBehaviour that control all the actions of the sprite.
         """
+        
         return self._components
+
+    @property
+    def focus(self):
+        """
+        Is mouse cursor over the sprite?
+
+        This read-only property returns True when the coordinates of the mouse cursor collide with the rectangle
+        of the sprite.
+        """
+
+        return self._focus
 
     def update(self):
         """
@@ -127,22 +139,22 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def _handle_mouse_motion(self, event):
         if event.type == MOUSEMOTION and self._takes_focus:
-            self._previous_focus = self.focus
-            self.focus = self._rect.collidepoint(event.pos)
+            self._previous_focus = self._focus
+            self._focus = self._rect.collidepoint(event.pos)
             self._handle_hover()
 
     def _handle_hover(self):
-        if self.focus is self._previous_focus:
+        if self._focus is self._previous_focus:
             return None
         for component in self._components:
-            if self.focus:
+            if self._focus:
                 component.on_hover()
             else:
                 component.on_hover_exit()
 
     def _handle_mouse_button_up(self, event):
         handled = False
-        if event.type == MOUSEBUTTONUP and self.focus:
+        if event.type == MOUSEBUTTONUP and self._focus:
             for component in self._components:
                 if component.on_click(event.button):
                     handled = True
