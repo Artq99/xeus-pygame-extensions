@@ -23,15 +23,15 @@ class XPGESpriteTest(TestCase):
 
     def setUp(self):
         self.sprite = XPGESprite(None)
-        self.sprite._rect = Rect(SPRITE_X, SPRITE_Y, SPRITE_SIZE_X, SPRITE_SIZE_Y)
-        self.sprite._image = Surface((SPRITE_SIZE_X, SPRITE_SIZE_Y))
+        self.sprite.image = Surface((SPRITE_SIZE_X, SPRITE_SIZE_Y))
+        self.sprite.position = (SPRITE_X, SPRITE_Y)
 
         self.component_1 = Mock(spec=SpriteBehaviour)
         self.component_2 = Mock(spec=SpriteBehaviour)
         self.component_3 = Mock(spec=SpriteBehaviour)
-        self.sprite._components.append(self.component_1)
-        self.sprite._components.append(self.component_2)
-        self.sprite._components.append(self.component_3)
+        self.sprite.components.append(self.component_1)
+        self.sprite.components.append(self.component_2)
+        self.sprite.components.append(self.component_3)
 
     def test_should_add_sprite_to_group_on_creation(self):
         # given when
@@ -128,8 +128,9 @@ class XPGESpriteTest(TestCase):
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        self.sprite._rect.collidepoint.assert_called_once_with(MOUSE_POS_INSIDE_SPRITE)
-        self.assertTrue(self.sprite._focus)
+        x, y = MOUSE_POS_INSIDE_SPRITE
+        self.sprite.rect.collidepoint.assert_called_once_with(x, y)
+        self.assertTrue(self.sprite.focus)
 
     def test_should_set_sprite_focus_to_false(self):
         # given
@@ -140,20 +141,21 @@ class XPGESpriteTest(TestCase):
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        self.sprite._rect.collidepoint.assert_called_once_with(MOUSE_POS_INSIDE_SPRITE)
-        self.assertFalse(self.sprite._focus)
+        x, y = MOUSE_POS_INSIDE_SPRITE
+        self.sprite.rect.collidepoint.assert_called_once_with(x, y)
+        self.assertFalse(self.sprite.focus)
 
     def test_should_not_change_focus_when_take_focus_is_false(self):
         # given
-        self.sprite._takes_focus = False
+        self.sprite.takes_focus = False
         self.sprite._rect = Mock(spec=Rect)
 
         # when
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        self.sprite._rect.collidepoint.assert_not_called()
-        self.assertFalse(self.sprite._focus)
+        self.sprite.rect.collidepoint.assert_not_called()
+        self.assertFalse(self.sprite.focus)
 
     def test_should_call_on_hover_on_components(self):
         # when

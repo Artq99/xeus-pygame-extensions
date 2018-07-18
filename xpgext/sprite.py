@@ -168,7 +168,7 @@ class XPGESprite(pygame.sprite.Sprite):
     def _handle_mouse_motion(self, event):
         if event.type == MOUSEMOTION and self._takes_focus:
             self._previous_focus = self._focus
-            self._focus = self._rect.collidepoint(event.pos)
+            self._focus = self._rect.collidepoint(event.pos[0], event.pos[1])
             self._handle_hover()
 
     def _handle_hover(self):
@@ -270,7 +270,7 @@ class SpriteBehaviour:
 
 
 class XPGEGroup(pygame.sprite.Group):
-    """Group implementation adjusted to work with XPGE Sprite."""
+    """Group implementation adjusted to work with XPGESprite."""
 
     def __init__(self, *sprites):
         super().__init__(*sprites)
