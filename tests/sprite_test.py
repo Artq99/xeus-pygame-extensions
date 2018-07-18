@@ -29,9 +29,9 @@ class XPGESpriteTest(TestCase):
         self.component_1 = Mock(spec=SpriteBehaviour)
         self.component_2 = Mock(spec=SpriteBehaviour)
         self.component_3 = Mock(spec=SpriteBehaviour)
-        self.sprite.components.append(self.component_1)
-        self.sprite.components.append(self.component_2)
-        self.sprite.components.append(self.component_3)
+        self.sprite._components.append(self.component_1)
+        self.sprite._components.append(self.component_2)
+        self.sprite._components.append(self.component_3)
 
     def test_should_add_sprite_to_group_on_creation(self):
         # given when

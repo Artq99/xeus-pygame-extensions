@@ -9,7 +9,6 @@ class XPGESprite(pygame.sprite.Sprite):
 
     def __init__(self, scene_manager, *groups):
         super().__init__(*groups)
-        self.components = list()
 
         self._previous_focus = False
         self.focus = False
@@ -21,6 +20,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self._rect = pygame.Rect(0, 0, 0, 0)
         self._is_active = True
         self._takes_focus = True
+        self._components = list()
 
     @property
     def scene_manager(self):
@@ -88,13 +88,22 @@ class XPGESprite(pygame.sprite.Sprite):
     def takes_focus(self, value):
         self._takes_focus = value
 
+    @property
+    def components(self):
+        """
+        The components of the sprite.
+
+        These are the descendants of the class SpriteBehaviour that control all the actions of the sprite.
+        """
+        return self._components
+
     def update(self):
         """
         Update sprite and call on_update methods from each of its components.
         """
 
         if self._is_active:
-            for component in self.components:
+            for component in self._components:
                 component.on_update()
 
     def handle_event(self, event):
@@ -110,7 +119,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self._handle_mouse_motion(event)
         handled = self._handle_mouse_button_up(event)
         if not handled:
-            for component in self.components:
+            for component in self._components:
                 if component.on_handle_event(event):
                     handled = True
                     break
@@ -125,7 +134,7 @@ class XPGESprite(pygame.sprite.Sprite):
     def _handle_hover(self):
         if self.focus is self._previous_focus:
             return None
-        for component in self.components:
+        for component in self._components:
             if self.focus:
                 component.on_hover()
             else:
@@ -134,7 +143,7 @@ class XPGESprite(pygame.sprite.Sprite):
     def _handle_mouse_button_up(self, event):
         handled = False
         if event.type == MOUSEBUTTONUP and self.focus:
-            for component in self.components:
+            for component in self._components:
                 if component.on_click(event.button):
                     handled = True
                     break

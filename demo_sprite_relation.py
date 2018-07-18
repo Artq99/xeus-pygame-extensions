@@ -32,7 +32,7 @@ class DemoScene(SimpleScene):
         sprite1 = XPGESprite(self.scene_manager)
         sprite1.image = star1
         sprite1.set_pos(10, 10)
-        sprite1.components.append(ToggleSprite(sprite1))
+        sprite1._components.append(ToggleSprite(sprite1))
 
         sprite2 = XPGESprite(self.scene_manager)
         sprite2.name = 'sprite2'

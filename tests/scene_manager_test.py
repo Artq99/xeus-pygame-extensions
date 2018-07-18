@@ -53,7 +53,7 @@ class SimpleSceneManagerTest(TestCase):
 
         test_sprite = XPGESprite(simple_scene_manager)
         component_mock = Mock(spec=SpriteBehaviour)
-        test_sprite.components.append(component_mock)
+        test_sprite._components.append(component_mock)
         sprite_list = [test_sprite]
 
         simple_scene_manager._sprites.__iter__ = Mock(return_value=iter(sprite_list))
