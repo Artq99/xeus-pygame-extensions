@@ -25,10 +25,7 @@ class XPGApplication:
     @property
     def scene_manager(self):
         """
-        Get the scene manager used by the application.
-
-        :return: scene manager instance
-        :rtype: SimpleSceneManager
+        The scene manager used by the application.
         """
 
         return self._scene_manager
@@ -36,34 +33,24 @@ class XPGApplication:
     @property
     def frame_rate(self):
         """
-        Get the desired frame rate.
+        The desired frame rate.
 
-        This is not the computed real frame rate on which the application currently runs, but the desired value.
-
-        :return: desired frame rate
-        :rtype: int
+        This property does not return the computed, real frame rate on which the application currently runs,
+        but the desired value.
         """
 
         return self._frame_rate
 
     @frame_rate.setter
     def frame_rate(self, value):
-        """
-        Set the desired frame rate.
-
-        :param value: desired frame rate
-        :type value: int
-        """
-
         self._frame_rate = value
 
     @property
     def is_running(self):
         """
-        Get the state of the application.
+        The state of the application.
 
-        :return: is the application running?
-        :rtype: bool
+        This property returns True if the mainloop of the application is running, and False otherwise.
         """
 
         return self._is_running
