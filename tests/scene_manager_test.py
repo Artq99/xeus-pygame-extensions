@@ -22,7 +22,7 @@ class SimpleSceneManagerTest(TestCase):
     def test_should_register_scene(self):
         # given
         simple_scene_manager = SimpleSceneManager()
-        test_scene_name = 'test scene'
+        test_scene_name = "test scene"
         test_scene = SimpleScene(simple_scene_manager)
 
         # when
@@ -34,7 +34,6 @@ class SimpleSceneManagerTest(TestCase):
 
     def test_should_not_overwrite_scene_on_registering(self):
         # given
-
         simple_scene_manager = SimpleSceneManager()
         test_scene_name = "test scene"
         test_scene_1 = SimpleScene(simple_scene_manager)
@@ -57,7 +56,7 @@ class SimpleSceneManagerTest(TestCase):
         sprite_list = [test_sprite]
 
         simple_scene_manager._sprites.__iter__ = Mock(return_value=iter(sprite_list))
-        test_scene_name = 'test name'
+        test_scene_name = "test name"
 
         class TestSimpleScene(SimpleScene):
 
@@ -82,7 +81,7 @@ class SimpleSceneManagerTest(TestCase):
 
         # when then
         with self.assertRaises(SceneLoadingError):
-            simple_scene_manager.load_scene('test scene')
+            simple_scene_manager.load_scene("test scene")
 
     def test_should_draw_scene(self):
         # given

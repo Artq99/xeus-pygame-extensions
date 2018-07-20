@@ -44,9 +44,11 @@ class DemoScene(SimpleScene):
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
 
+        star = pygame.image.load(os.path.join("demo_resources", "star.png")).convert()
+
         demo_sprite = XPGESprite(self.scene_manager)
-        demo_sprite.load_image(os.path.join("demo_resources", "star.png"))
-        demo_sprite.set_pos(270, 190)
+        demo_sprite.image = star
+        demo_sprite.position = (270, 190)
         demo_sprite.components.append(DemoSpriteBehaviour(demo_sprite))
         self.sprites.append(demo_sprite)
 
