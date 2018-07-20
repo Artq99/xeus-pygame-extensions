@@ -125,7 +125,13 @@ class SpriteBehaviour:
     """
 
     def __init__(self, sprite):
-        self.sprite = sprite
+        self._sprite = sprite
+
+    @property
+    def sprite(self):
+        """The sprite to which the script belongs."""
+
+        return self._sprite
 
     def on_scene_loaded(self):
         """
