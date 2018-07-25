@@ -3,8 +3,9 @@ from unittest.mock import Mock
 
 from pygame.event import Event
 from pygame import Rect, Surface, USEREVENT, MOUSEMOTION, MOUSEBUTTONUP
+from pygame.sprite import Group
 
-from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
+from xpgext.sprite import XPGESprite, SpriteBehaviour
 
 SPRITE_X = 0
 SPRITE_Y = 0
@@ -35,7 +36,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_add_sprite_to_group_on_creation(self):
         # given when
-        group = XPGEGroup()
+        group = Group()
         sprite = XPGESprite(None, group)
 
         # then
@@ -44,8 +45,8 @@ class XPGESpriteTest(TestCase):
 
     def test_should_add_sprite_to_two_groups_on_creation(self):
         # given when
-        group1 = XPGEGroup()
-        group2 = XPGEGroup()
+        group1 = Group()
+        group2 = Group()
         sprite = XPGESprite(None, group1, group2)
 
         # then
