@@ -127,6 +127,16 @@ class SpriteBehaviour:
     def __init__(self, sprite):
         self.sprite = sprite
 
+    @property
+    def scene_manager(self):
+        """
+        Alias for SpriteBehaviour.sprite.scene_manager.
+
+        This property provides easier access to the scene manager.
+        """
+        
+        return self.sprite.scene_manager
+
     def on_scene_loaded(self):
         """
         Method called when the scene has been loaded.
