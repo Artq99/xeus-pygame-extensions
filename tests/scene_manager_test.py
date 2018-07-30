@@ -233,10 +233,8 @@ class SimpleSceneManagerTest(TestCase):
     def test_should_keep_static_data_after_switching_scenes(self):
         # given
         simple_scene_manager = SimpleSceneManager()
-        test_scene_1 = SimpleScene(simple_scene_manager)
-        test_scene_2 = SimpleScene(simple_scene_manager)
-        simple_scene_manager.register_scene(test_scene_1, "test scene 1")
-        simple_scene_manager.register_scene(test_scene_2, "test scene 2")
+        simple_scene_manager.register_scene(SimpleScene, "test scene 1")
+        simple_scene_manager.register_scene(SimpleScene, "test scene 2")
         simple_scene_manager.static["test data"] = 1
 
         # when
