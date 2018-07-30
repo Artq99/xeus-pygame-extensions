@@ -78,6 +78,18 @@ class SimpleSceneManager(SceneManagerBase):
         self._scenes = dict()
         self._current_scene = None
         self._sprites = list()
+        self._static = dict()
+
+    @property
+    def static(self):
+        """
+        Dictionary holding all the data, that should not be changed, reset or deleted when a new scene is loaded.
+
+        This property provides an easy way to keep data like player character's info, gathered items and other
+        variables, that should be common for all scenes.
+        """
+
+        return self._static
 
     def register_scene(self, scene, name):
         if name in self._scenes.keys():
