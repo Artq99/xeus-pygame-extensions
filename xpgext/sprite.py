@@ -99,6 +99,18 @@ class XPGESprite(pygame.sprite.Sprite):
     def set_pos(self, x, y):
         self.rect.topleft = (x, y)
 
+    def get_component_by_type(self, component_type):
+        return None
+
+    def get_component_by_type_name(self, component_type_name):
+        return None
+
+    def find_components_by_type(self, component_type):
+        return None
+
+    def find_components_by_type_name(self, component_type_name):
+        return None
+
     def find_by_name(self, name):
         """
         This function is not intended to be used on its own.
