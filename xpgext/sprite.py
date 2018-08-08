@@ -2,6 +2,12 @@ import pygame
 from pygame.locals import *
 
 
+class ComponentNotFoundError(Exception):
+    """
+    Thrown when a given component could not be found in the components list of a XPGESprite.
+    """
+
+
 class XPGESprite(pygame.sprite.Sprite):
     """
     Base class for all the visible game elements.
@@ -199,6 +205,69 @@ class XPGESprite(pygame.sprite.Sprite):
 
         if self._is_active:
             surface.blit(self._image, self._rect.topleft)
+
+    def get_component_by_type(self, component_type):
+        """
+        Get the component of the sprite that is of the given type.
+
+        If there is more than one components of this type, this method returns the first, whose type matches the given
+        one.
+
+        :param component_type: type of the component
+        :type component_type: type
+        :return: component
+        :rtype: SpriteBehaviour
+        :raise ComponentNotFoundError: when no component of the given type has been found
+        """
+
+        return self.get_component_by_type_name(component_type.__name__)
+
+    def get_component_by_type_name(self, component_type_name):
+        """
+        Get the component of the sprite by the name of its type.
+
+        If there is more than one components matching the type name, this method returns the first, whose type matches
+        the given name.
+
+        :param component_type_name: name of the type of the component
+        :type component_type_name: str
+        :return: component
+        :rtype: SpriteBehaviour
+        :raise ComponentNotFoundError: when no component whose type matches the given name has been found
+        """
+
+        components = self.find_components_by_type_name(component_type_name)
+        if len(components) == 0:
+            raise ComponentNotFoundError(component_type_name)
+        return components[0]
+
+    def find_components_by_type(self, component_type):
+        """
+        Find all the components of the sprite of the given type.
+
+        :param component_type: type of the component
+        :type component_type: type
+        :return: list of the components
+        :rtype: list
+        """
+
+        return self.find_components_by_type_name(component_type.__name__)
+
+    def find_components_by_type_name(self, component_type_name):
+        """
+        Find all the components of the sprite whose name matches the given one.
+
+        :param component_type_name: the name of the type of the component
+        :type component_type_name: str
+        :return: list of the components
+        :rtype: list
+        """
+        
+        result = list()
+        for component in self.components:
+            if component.__class__.__name__ == component_type_name:
+                result.append(component)
+        return result
 
     def find_by_name(self, name):
         """
