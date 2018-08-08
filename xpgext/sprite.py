@@ -106,7 +106,7 @@ class XPGESprite(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
 
     def get_component_by_type(self, component_type):
-        raise NotImplementedError()
+        return self.get_component_by_type_name(component_type.__name__)
 
     def get_component_by_type_name(self, component_type_name):
         components = self.find_components_by_type_name(component_type_name)
