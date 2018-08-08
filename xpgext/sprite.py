@@ -109,7 +109,10 @@ class XPGESprite(pygame.sprite.Sprite):
         raise NotImplementedError()
 
     def get_component_by_type_name(self, component_type_name):
-        raise NotImplementedError()
+        components = self.find_components_by_type_name(component_type_name)
+        if len(components) == 0:
+            raise ComponentNotFoundError(component_type_name)
+        return components[0]
 
     def find_components_by_type(self, component_type):
         return self.find_components_by_type_name(component_type.__name__)

@@ -204,7 +204,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_get_component_by_type(self):
         # when
-        component = self.sprite.find_components_by_type(TestComponent1)
+        component = self.sprite.get_component_by_type(TestComponent1)
 
         # then
         self.assertIsNotNone(component)
@@ -212,7 +212,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_get_component_by_type_name(self):
         # when
-        component = self.sprite.find_components_by_type_name("TestComponent1")
+        component = self.sprite.get_component_by_type_name("TestComponent1")
 
         # then
         self.assertIsNotNone(component)
@@ -221,7 +221,7 @@ class XPGESpriteTest(TestCase):
     def test_should_raise_error_when_component_not_present(self):
         # when then
         with self.assertRaises(ComponentNotFoundError):
-            self.sprite.find_components_by_type("TestComponent4")
+            self.sprite.get_component_by_type_name("TestComponent4")
 
     def test_should_raise_error_when_no_component_present(self):
         # given
@@ -229,7 +229,7 @@ class XPGESpriteTest(TestCase):
 
         # when then
         with self.assertRaises(ComponentNotFoundError):
-            self.sprite.find_components_by_type("TestComponent1")
+            self.sprite.get_component_by_type_name("TestComponent1")
 
     def test_should_find_components_by_type(self):
         # given
