@@ -2,6 +2,12 @@ import pygame
 from pygame.locals import *
 
 
+class ComponentNotFoundError(Exception):
+    """
+    Thrown when a given component could not be found in the components list of a XPGESprite.
+    """
+
+
 class XPGESprite(pygame.sprite.Sprite):
     """
     Base class for all the visible game elements.
