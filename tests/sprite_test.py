@@ -250,7 +250,7 @@ class XPGESpriteTest(TestCase):
         self.sprite.components.append(test_component)
 
         # when
-        components = self.sprite.find_components_by_type("TestComponent1")
+        components = self.sprite.find_components_by_type_name("TestComponent1")
 
         # then
         self.assertEqual(2, len(components))
@@ -259,7 +259,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_not_find_component_when_not_present(self):
         # when
-        components = self.sprite.find_components_by_type("TestComponent4")
+        components = self.sprite.find_components_by_type_name("TestComponent4")
 
         # then
         self.assertEqual(0, len(components))
@@ -269,7 +269,7 @@ class XPGESpriteTest(TestCase):
         self.sprite.components.clear()
 
         # when
-        components = self.sprite.find_components_by_type("TestComponent1")
+        components = self.sprite.find_components_by_type_name("TestComponent1")
 
         # then
         self.assertEqual(0, len(components))
