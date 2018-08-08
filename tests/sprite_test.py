@@ -185,3 +185,35 @@ class XPGESpriteTest(TestCase):
 
         # then
         surface.blit.assert_called_once_with(self.sprite.image, (SPRITE_X, SPRITE_Y))
+
+    def test_should_get_component_by_type(self):
+        component = self.sprite.find_components_by_type(SpriteBehaviour)
+        self.assertIsNotNone(component)
+
+    def test_should_get_component_by_type_name(self):
+        component = self.sprite.find_components_by_type_name("SpriteBehaviour")
+        self.assertIsNotNone(component)
+
+    def test_should_raise_error_when_component_not_present(self):
+        component = self.sprite.find_components_by_type("SpriteBehaviour")
+        self.assertIsNotNone(component)
+
+    def test_should_raise_error_when_no_component_present(self):
+        component = self.sprite.find_components_by_type("SpriteBehaviour")
+        self.assertIsNotNone(component)
+
+    def test_should_find_components_by_type(self):
+        components = self.sprite.find_components_by_type(SpriteBehaviour)
+        self.assertEqual(1, len(components))
+
+    def test_should_find_components_by_type_name(self):
+        components = self.sprite.find_components_by_type("SpriteBehaviour")
+        self.assertEqual(1, len(components))
+
+    def test_should_not_find_component_when_not_present(self):
+        components = self.sprite.find_components_by_type("SpriteBehaviour")
+        self.assertEqual(0, len(components))
+
+    def test_should_not_find_component_when_no_component_present(self):
+        components = self.sprite.find_components_by_type("SpriteBehaviour")
+        self.assertEqual(0, len(components))
