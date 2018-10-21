@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock
 
-from pygame import Surface
+from pygame import Surface, Rect
 from pygame.event import Event
 
 from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError, SceneRegisteringError

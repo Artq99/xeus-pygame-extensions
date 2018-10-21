@@ -1,3 +1,5 @@
+import pygame
+
 SCENE_NOT_REGISTERED_ = "Scene {} has not been registered."
 SCENE_ALREADY_REGISTERED_ = "Scene {} has already been registered."
 
@@ -24,6 +26,17 @@ class SimpleSceneManager:
         self._current_scene = None
         self._sprites = list()
         self._static = dict()
+        self._screen_rect = None
+
+    @property
+    def screen_rect(self):
+        """
+        Object of the type pygame.Rect with the values corresponding to the current display mode.
+        """
+
+        if self._screen_rect is None:
+            self._screen_rect = pygame.display.get_surface().get_rect()
+        return self._screen_rect
 
     @property
     def static(self):
