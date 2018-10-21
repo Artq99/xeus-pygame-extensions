@@ -1,4 +1,6 @@
-from unittest import TestCase
+"""
+Utilities for testing.
+"""
 
 from threading import Thread
 from time import sleep
@@ -8,6 +10,16 @@ from pygame import error as PygameError
 
 
 def run_with_timeout(timeout, test_func, *args, **kwargs):
+    """
+    Run the given test_func and quit pygame after the given timeout.
+
+    This util method helps to test various functionalities that happen in the main loop of the pygame application.
+
+    :param timeout: the amount of time after which the pygame should be stopped
+    :param test_func: the function with the loop
+    :param args: args passed to the test_func
+    :param kwargs: kwargs passed to the test_func
+    """
 
     class _PyGameStopperThread(Thread):
 

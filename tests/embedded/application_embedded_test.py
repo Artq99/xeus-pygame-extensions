@@ -10,7 +10,7 @@ from tests.test_utils import run_with_timeout
 
 
 class XPGApplicationTest(TestCase):
-    """Test class for XPGApplication."""
+    """The test class for the embedded tests of the application module."""
 
     def setUp(self):
         pygame.init()
