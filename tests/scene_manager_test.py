@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock
 
-from pygame import Surface
+from pygame import Surface, Rect
 from pygame.event import Event
 
 from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError, SceneRegisteringError
@@ -18,6 +18,21 @@ class SimpleSceneManagerTest(TestCase):
 
         # then
         self.assertIsNotNone(simple_scene_manager)
+
+    def test_should_return_screen_rect(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+
+        # when
+        screen_rect = simple_scene_manager.screen_rect
+
+        # then
+        self.assertIsNotNone(screen_rect)
+        self.assertIsInstance(screen_rect, Rect)
+        self.assertEqual(0, screen_rect.top)
+        self.assertEqual(0, screen_rect.left)
+        self.assertEqual(600, screen_rect.bottom)
+        self.assertEqual(800, screen_rect.right)
 
     def test_should_register_scene(self):
         # given
