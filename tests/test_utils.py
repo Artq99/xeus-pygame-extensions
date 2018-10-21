@@ -7,7 +7,7 @@ from pygame import quit as pygame_quit
 from pygame import error as PygameError
 
 
-def run_with_timeout(timeout, test_func, *args, **qwargs):
+def run_with_timeout(timeout, test_func, *args, **kwargs):
 
     class _PyGameStopperThread(Thread):
 
@@ -23,6 +23,6 @@ def run_with_timeout(timeout, test_func, *args, **qwargs):
     stopper_thread.start()
 
     try:
-        test_func(*args, **qwargs)
+        test_func(*args, **kwargs)
     except PygameError:
         pass
