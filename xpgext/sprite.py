@@ -262,7 +262,7 @@ class XPGESprite(pygame.sprite.Sprite):
         :return: list of the components
         :rtype: list
         """
-        
+
         result = list()
         for component in self.components:
             if component.__class__.__name__ == component_type_name:
@@ -310,7 +310,7 @@ class SpriteBehaviour:
 
         This property provides easier access to the scene manager.
         """
-        
+
         return self.sprite.scene_manager
 
     def on_scene_loaded(self):

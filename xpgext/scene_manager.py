@@ -125,6 +125,10 @@ class SimpleSceneManager:
         :param sprite: the sprite to spawn
         """
 
+        if sprite in self._sprites:
+            msg = "cannot spawn sprite '{}' - it is already alive"
+            raise ValueError(msg.format(sprite.name))
+
         self._sprites.append(sprite)
         for component in sprite.components:
             component.on_spawn()
