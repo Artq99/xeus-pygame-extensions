@@ -352,3 +352,13 @@ class SpriteBehaviour:
         """
         Method called on Sprite.handle_event, when mouse pointer stops colliding with the sprite.
         """
+
+    def on_spawn(self):
+        """
+        Method called when the sprite first enters the game.
+        """
+
+    def on_kill(self):
+        """
+        Method called when the sprite is removed from the scene manager.
+        """

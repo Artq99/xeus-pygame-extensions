@@ -39,6 +39,9 @@ class DemoSpriteBehaviour(SpriteBehaviour):
     def on_hover_exit(self):
         self.sprite.image = self.default_image
 
+    def on_spawn(self):
+        print("Sprite spawned!")
+
 
 class DemoScene(SimpleScene):
     def __init__(self, scene_manager):
