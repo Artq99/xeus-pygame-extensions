@@ -262,7 +262,7 @@ class XPGESprite(pygame.sprite.Sprite):
         :return: list of the components
         :rtype: list
         """
-        
+
         result = list()
         for component in self.components:
             if component.__class__.__name__ == component_type_name:
@@ -310,7 +310,7 @@ class SpriteBehaviour:
 
         This property provides easier access to the scene manager.
         """
-        
+
         return self.sprite.scene_manager
 
     def on_scene_loaded(self):
@@ -351,4 +351,14 @@ class SpriteBehaviour:
     def on_hover_exit(self):
         """
         Method called on Sprite.handle_event, when mouse pointer stops colliding with the sprite.
+        """
+
+    def on_spawn(self):
+        """
+        Method called when the sprite first enters the game.
+        """
+
+    def on_kill(self):
+        """
+        Method called when the sprite is removed from the scene manager.
         """

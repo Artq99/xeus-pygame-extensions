@@ -82,6 +82,9 @@ class SimpleSceneManager:
             for sprite in self._sprites:
                 for component in sprite.components:
                     component.on_scene_loaded()
+            for sprite in self._sprites:
+                for component in sprite.components:
+                    component.on_spawn()
 
     def draw(self, surface):
         """
@@ -114,6 +117,37 @@ class SimpleSceneManager:
 
         for sprite in reversed(self._sprites):
             sprite.update()
+
+    def spawn(self, sprite):
+        """
+        Spawn the sprite.
+
+        :param sprite: the sprite to spawn
+        """
+
+        if sprite in self._sprites:
+            msg = "cannot spawn sprite '{}' - it is already alive"
+            raise ValueError(msg.format(sprite.name))
+
+        self._sprites.append(sprite)
+        for component in sprite.components:
+            component.on_spawn()
+
+    def kill(self, sprite):
+        """
+        Remove the sprite from the game.
+
+        :param sprite: the sprite to remove
+        """
+
+        try:
+            self._sprites.remove(sprite)
+        except ValueError:
+            msg = "sprite '{}' cannot be killed, because it is not alive in the scene manager"
+            raise ValueError(msg.format(sprite.name))
+        else:
+            for component in sprite.components:
+                component.on_kill()
 
     def find_by_name(self, name):
         """
