@@ -2,9 +2,9 @@ import os
 
 import pygame
 
-from xpgext.application import XPGApplication
-from xpgext.scene_manager import SimpleSceneManager
+from xpgext.application import XPGEApplication
 from xpgext.scene import SimpleScene
+from xpgext.scene_manager import SimpleSceneManager
 from xpgext.sprite import XPGESprite, SpriteBehaviour
 
 
@@ -43,7 +43,7 @@ class DemoScene(SimpleScene):
         self.sprites.append(sprite2)
 
 
-class Application(XPGApplication):
+class Application(XPGEApplication):
 
     def __init__(self):
         super().__init__(SimpleSceneManager(), (640, 480))
@@ -52,5 +52,7 @@ class Application(XPGApplication):
 
 
 if __name__ == '__main__':
+    pygame.init()
     application = Application()
     application.run_main_loop()
+    pygame.quit()

@@ -2,13 +2,14 @@ import os
 
 import pygame
 
-from xpgext.application import XPGApplication
-from xpgext.scene_manager import SimpleSceneManager
+from xpgext.application import XPGEApplication
 from xpgext.scene import SimpleScene
+from xpgext.scene_manager import SimpleSceneManager
 from xpgext.sprite import XPGESprite
 
 
 class DemoScene(SimpleScene):
+
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
 
@@ -20,7 +21,8 @@ class DemoScene(SimpleScene):
         self.sprites.append(demo_sprite)
 
 
-class Application(XPGApplication):
+class Application(XPGEApplication):
+
     def __init__(self):
         super().__init__(SimpleSceneManager(), (640, 480))
         self.scene_manager.register_scene(DemoScene, "demo")

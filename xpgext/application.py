@@ -2,14 +2,12 @@ import pygame
 from pygame.locals import *
 
 
-class XPGApplication:
+class XPGEApplication:
     """
     Base class for the application using XPG Extensions.
 
     :param scene_manager: scene manager implementation used in the application
-    :type scene_manager: SceneManagerBase
     :param resolution: the target resolution of the pygame window
-    :type resolution: tuple
     :param args: arguments passed to pygame.display.set_mode
     :param kwargs: keyword arguments passed to pygame.display.set_mode
     """
