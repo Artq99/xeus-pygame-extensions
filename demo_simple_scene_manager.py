@@ -25,6 +25,9 @@ class Application(XPGEApplication):
 
     def __init__(self):
         super().__init__(SimpleSceneManager(), (640, 480))
+
+        self.caption = "Demo: SimpleSceneManager usage"
+
         self.scene_manager.register_scene(DemoScene, "demo")
         self.scene_manager.load_scene("demo")
 
