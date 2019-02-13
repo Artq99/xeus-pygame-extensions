@@ -12,10 +12,11 @@ class ToggleSprite(SpriteBehaviour):
 
     def __init__(self, sprite):
         super().__init__(sprite)
+
         self.sprite_to_toggle = None
 
     def on_scene_loaded(self):
-        self.sprite_to_toggle = self.sprite.scene_manager.get_by_name('sprite2')
+        self.sprite_to_toggle = self.sprite.scene_manager.get_by_name("sprite2")
 
     def on_click(self, button):
         self.sprite_to_toggle.is_active = not self.sprite_to_toggle.is_active
@@ -35,7 +36,7 @@ class DemoScene(SimpleScene):
         sprite1.components.append(ToggleSprite(sprite1))
 
         sprite2 = XPGESprite(self.scene_manager)
-        sprite2.name = 'sprite2'
+        sprite2.name = "sprite2"
         sprite2.image = star2
         sprite2.position = (200, 10)
 
@@ -47,8 +48,11 @@ class Application(XPGEApplication):
 
     def __init__(self):
         super().__init__(SimpleSceneManager(), (640, 480))
-        self.scene_manager.register_scene(DemoScene, 'demo')
-        self.scene_manager.load_scene('demo')
+
+        self.caption = "Demo: Sprite relation"
+
+        self.scene_manager.register_scene(DemoScene, "demo")
+        self.scene_manager.load_scene("demo")
 
 
 if __name__ == '__main__':

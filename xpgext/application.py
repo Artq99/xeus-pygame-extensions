@@ -44,6 +44,18 @@ class XPGEApplication:
         self._frame_rate = value
 
     @property
+    def caption(self):
+        """
+        The caption of the application window.
+        """
+
+        return pygame.display.get_caption()
+
+    @caption.setter
+    def caption(self, caption):
+        pygame.display.set_caption(caption)
+
+    @property
     def is_running(self):
         """
         The state of the application.
