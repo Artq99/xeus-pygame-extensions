@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock
 
-from pygame import Surface
+from pygame import Surface, Rect
 from pygame.event import Event
 
 from xpgext.scene_manager import SimpleSceneManager, SceneLoadingError, SceneRegisteringError
@@ -22,7 +22,7 @@ class SimpleSceneManagerTest(TestCase):
     def test_should_register_scene(self):
         # given
         simple_scene_manager = SimpleSceneManager()
-        test_scene_name = 'test scene'
+        test_scene_name = "test scene"
         test_scene = SimpleScene(simple_scene_manager)
 
         # when
@@ -34,7 +34,6 @@ class SimpleSceneManagerTest(TestCase):
 
     def test_should_not_overwrite_scene_on_registering(self):
         # given
-
         simple_scene_manager = SimpleSceneManager()
         test_scene_name = "test scene"
         test_scene_1 = SimpleScene(simple_scene_manager)
@@ -57,7 +56,7 @@ class SimpleSceneManagerTest(TestCase):
         sprite_list = [test_sprite]
 
         simple_scene_manager._sprites.__iter__ = Mock(return_value=iter(sprite_list))
-        test_scene_name = 'test name'
+        test_scene_name = "test name"
 
         class TestSimpleScene(SimpleScene):
 
@@ -82,7 +81,7 @@ class SimpleSceneManagerTest(TestCase):
 
         # when then
         with self.assertRaises(SceneLoadingError):
-            simple_scene_manager.load_scene('test scene')
+            simple_scene_manager.load_scene("test scene")
 
     def test_should_draw_scene(self):
         # given
@@ -229,3 +228,84 @@ class SimpleSceneManagerTest(TestCase):
 
         # then
         self.assertIsNone(result)
+
+    def test_should_keep_static_data_after_switching_scenes(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+        simple_scene_manager.register_scene(SimpleScene, "test scene 1")
+        simple_scene_manager.register_scene(SimpleScene, "test scene 2")
+        simple_scene_manager.static["test data"] = 1
+
+        # when
+        simple_scene_manager.load_scene("test scene 1")
+        simple_scene_manager.static["test data"] = 2
+        simple_scene_manager.load_scene("test scene 2")
+
+        # then
+        self.assertEqual(simple_scene_manager.static["test data"], 2)
+
+    def test_should_spawn_sprite(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+
+        test_sprite = XPGESprite(simple_scene_manager)
+        test_sprite.name = "test sprite"
+        mock_component = Mock(spec=SpriteBehaviour)
+        test_sprite.components.append(mock_component)
+
+        # when
+        simple_scene_manager.spawn(test_sprite)
+
+        # then
+        self.assertIn(test_sprite, simple_scene_manager._sprites)
+        mock_component.on_spawn.assert_called_once()
+
+    def test_should_throw_error_on_spawning_when_sprite_already_exists(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+
+        test_sprite = XPGESprite(simple_scene_manager)
+        test_sprite.name = "test sprite"
+        mock_component = Mock(spec=SpriteBehaviour)
+        test_sprite.components.append(mock_component)
+
+        simple_scene_manager._sprites.append(test_sprite)
+
+        # when then
+        with self.assertRaises(ValueError):
+            simple_scene_manager.spawn(test_sprite)
+
+        mock_component.on_spawn.assert_not_called()
+
+    def test_should_kill_sprite(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+
+        test_sprite = XPGESprite(simple_scene_manager)
+        test_sprite.name = "test sprite"
+        mock_component = Mock(spec=SpriteBehaviour)
+        test_sprite.components.append(mock_component)
+
+        simple_scene_manager._sprites.append(test_sprite)
+
+        # when
+        simple_scene_manager.kill(test_sprite)
+
+        # then
+        self.assertNotIn(test_sprite, simple_scene_manager._sprites)
+        mock_component.on_kill.assert_called_once()
+
+    def test_should_throw_error_on_killing_when_sprite_not_existing(self):
+        # given
+        simple_scene_manager = SimpleSceneManager()
+
+        test_sprite = XPGESprite(simple_scene_manager)
+        test_sprite.name = "test sprite"
+        mock_component = Mock(spec=SpriteBehaviour)
+        test_sprite.components.append(mock_component)
+
+        # when then
+        with self.assertRaises(ValueError):
+            simple_scene_manager.kill(test_sprite)
+
+        mock_component.on_kill.assert_not_called()
