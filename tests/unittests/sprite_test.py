@@ -3,8 +3,9 @@ from unittest.mock import Mock
 
 from pygame.event import Event
 from pygame import Rect, Surface, USEREVENT, MOUSEMOTION, MOUSEBUTTONUP
+from pygame.sprite import Group
 
-from xpgext.sprite import XPGESprite, XPGEGroup, SpriteBehaviour
+from xpgext.sprite import XPGESprite, SpriteBehaviour, ComponentNotFoundError
 
 SPRITE_X = 0
 SPRITE_Y = 0
@@ -18,24 +19,40 @@ TEST_MOUSEMOTION_EVENT_WITH_POS_OUTSIDE_SPRITE = Event(MOUSEMOTION, {'pos': MOUS
 TEST_MOUSEBUTTONUP_EVENT_WITH_POS_INSIDE_SPRITE = Event(MOUSEBUTTONUP, {'pos': MOUSE_POS_INSIDE_SPRITE, 'button': 0})
 
 
+class TestComponent1(SpriteBehaviour):
+    pass
+
+
+class TestComponent2(SpriteBehaviour):
+    pass
+
+
+class TestComponent3(SpriteBehaviour):
+    pass
+
+
+class TestComponent4(SpriteBehaviour):
+    pass
+
+
 class XPGESpriteTest(TestCase):
     """Test class for XPGESprite class."""
 
     def setUp(self):
         self.sprite = XPGESprite(None)
-        self.sprite.rect = Rect(SPRITE_X, SPRITE_Y, SPRITE_SIZE_X, SPRITE_SIZE_Y)
         self.sprite.image = Surface((SPRITE_SIZE_X, SPRITE_SIZE_Y))
+        self.sprite.position = (SPRITE_X, SPRITE_Y)
 
-        self.component_1 = Mock(spec=SpriteBehaviour)
-        self.component_2 = Mock(spec=SpriteBehaviour)
-        self.component_3 = Mock(spec=SpriteBehaviour)
+        self.component_1 = Mock(spec=TestComponent1)
+        self.component_2 = Mock(spec=TestComponent2)
+        self.component_3 = Mock(spec=TestComponent3)
         self.sprite.components.append(self.component_1)
         self.sprite.components.append(self.component_2)
         self.sprite.components.append(self.component_3)
 
     def test_should_add_sprite_to_group_on_creation(self):
         # given when
-        group = XPGEGroup()
+        group = Group()
         sprite = XPGESprite(None, group)
 
         # then
@@ -44,8 +61,8 @@ class XPGESpriteTest(TestCase):
 
     def test_should_add_sprite_to_two_groups_on_creation(self):
         # given when
-        group1 = XPGEGroup()
-        group2 = XPGEGroup()
+        group1 = Group()
+        group2 = Group()
         sprite = XPGESprite(None, group1, group2)
 
         # then
@@ -65,7 +82,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_call_on_click_on_components(self):
         # given
-        self.sprite.focus = True
+        self.sprite._focus = True
         self.component_1.on_click = Mock(return_value=False)
         self.component_2.on_click = Mock(return_value=False)
         self.component_3.on_click = Mock(return_value=False)
@@ -80,7 +97,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_not_call_on_click_on_last_component(self):
         # given
-        self.sprite.focus = True
+        self.sprite._focus = True
         self.component_1.on_click = Mock(return_value=False)
         self.component_2.on_click = Mock(return_value=True)
 
@@ -121,32 +138,34 @@ class XPGESpriteTest(TestCase):
 
     def test_should_set_sprite_focus_to_true(self):
         # given
-        self.sprite.rect = Mock(spec=Rect)
-        self.sprite.rect.collidepoint = Mock(return_value=True)
+        self.sprite._rect = Mock(spec=Rect)
+        self.sprite._rect.collidepoint = Mock(return_value=True)
 
         # when
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        self.sprite.rect.collidepoint.assert_called_once_with(MOUSE_POS_INSIDE_SPRITE)
+        x, y = MOUSE_POS_INSIDE_SPRITE
+        self.sprite.rect.collidepoint.assert_called_once_with(x, y)
         self.assertTrue(self.sprite.focus)
 
     def test_should_set_sprite_focus_to_false(self):
         # given
-        self.sprite.rect = Mock(spec=Rect)
-        self.sprite.rect.collidepoint = Mock(return_value=False)
+        self.sprite._rect = Mock(spec=Rect)
+        self.sprite._rect.collidepoint = Mock(return_value=False)
 
         # when
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
 
         # then
-        self.sprite.rect.collidepoint.assert_called_once_with(MOUSE_POS_INSIDE_SPRITE)
+        x, y = MOUSE_POS_INSIDE_SPRITE
+        self.sprite.rect.collidepoint.assert_called_once_with(x, y)
         self.assertFalse(self.sprite.focus)
 
     def test_should_not_change_focus_when_take_focus_is_false(self):
         # given
-        self.sprite.take_focus = False
-        self.sprite.rect = Mock(spec=Rect)
+        self.sprite.takes_focus = False
+        self.sprite._rect = Mock(spec=Rect)
 
         # when
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_INSIDE_SPRITE)
@@ -166,7 +185,7 @@ class XPGESpriteTest(TestCase):
 
     def test_should_call_on_hover_exit_on_components(self):
         # given
-        self.sprite.focus = True
+        self.sprite._focus = True
 
         # when
         self.sprite.handle_event(TEST_MOUSEMOTION_EVENT_WITH_POS_OUTSIDE_SPRITE)
@@ -185,3 +204,75 @@ class XPGESpriteTest(TestCase):
 
         # then
         surface.blit.assert_called_once_with(self.sprite.image, (SPRITE_X, SPRITE_Y))
+
+    def test_should_get_component_by_type(self):
+        # when
+        component = self.sprite.get_component_by_type(TestComponent1)
+
+        # then
+        self.assertIsNotNone(component)
+        self.assertEqual(self.component_1, component)
+
+    def test_should_get_component_by_type_name(self):
+        # when
+        component = self.sprite.get_component_by_type_name("TestComponent1")
+
+        # then
+        self.assertIsNotNone(component)
+        self.assertEqual(self.component_1, component)
+
+    def test_should_raise_error_when_component_not_present(self):
+        # when then
+        with self.assertRaises(ComponentNotFoundError):
+            self.sprite.get_component_by_type_name("TestComponent4")
+
+    def test_should_raise_error_when_no_component_present(self):
+        # given
+        self.sprite.components.clear()
+
+        # when then
+        with self.assertRaises(ComponentNotFoundError):
+            self.sprite.get_component_by_type_name("TestComponent1")
+
+    def test_should_find_components_by_type(self):
+        # given
+        test_component = TestComponent1(self.sprite)
+        self.sprite.components.append(test_component)
+
+        # when
+        components = self.sprite.find_components_by_type(TestComponent1)
+
+        # then
+        self.assertEqual(2, len(components))
+        self.assertIn(self.component_1, components)
+        self.assertIn(test_component, components)
+
+    def test_should_find_components_by_type_name(self):
+        # given
+        test_component = TestComponent1(self.sprite)
+        self.sprite.components.append(test_component)
+
+        # when
+        components = self.sprite.find_components_by_type_name("TestComponent1")
+
+        # then
+        self.assertEqual(2, len(components))
+        self.assertIn(self.component_1, components)
+        self.assertIn(test_component, components)
+
+    def test_should_not_find_component_when_not_present(self):
+        # when
+        components = self.sprite.find_components_by_type_name("TestComponent4")
+
+        # then
+        self.assertEqual(0, len(components))
+
+    def test_should_not_find_component_when_no_component_present(self):
+        # given
+        self.sprite.components.clear()
+
+        # when
+        components = self.sprite.find_components_by_type_name("TestComponent1")
+
+        # then
+        self.assertEqual(0, len(components))
